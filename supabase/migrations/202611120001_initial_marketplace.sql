@@ -42,7 +42,6 @@ create table public.children (
   notes text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  constraint child_birth_date_reasonable check (birth_date <= current_date and birth_date >= current_date - interval '18 years')
 );
 
 create table public.provider_profiles (
