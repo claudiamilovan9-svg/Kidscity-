@@ -23,6 +23,7 @@ type PublicProvider = {
   imageAlt?: string;
   locality: string;
   sourceLabel: string;
+  address?: string;
 };
 
 const publicProviders: PublicProvider[] = [
@@ -79,6 +80,69 @@ const publicProviders: PublicProvider[] = [
     url: "https://www.clubulcopiilor.ro/locatie/active-kids-house/",
     locality: "Timișoara",
     sourceLabel: "Pagină de prezentare",
+  },
+  {
+    name: "Activitate Afară",
+    category: "Natură · aventură · activități în aer liber",
+    description: "Programe pentru copii cu activități sportive și experiențe în aer liber.",
+    url: "https://afterschool.ator.ro/",
+    locality: "Giroc",
+    address: "Zona Pădurii Giroc",
+    sourceLabel: "Date publice · neconfirmat de furnizor",
+  },
+  {
+    name: "Magic Town",
+    category: "Petreceri · joacă · evenimente",
+    description: "Spațiu și servicii pentru activități și evenimente dedicate copiilor.",
+    url: "https://www.magic-town.ro/",
+    locality: "Timișoara",
+    address: "Calea Buziașului 74",
+    sourceLabel: "Site oficial · listare neconfirmată",
+  },
+  {
+    name: "Cuib cu Teatru",
+    category: "Artă · teatru · creativitate",
+    description: "Activități de teatru și expresie creativă pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=Cuib+cu+Teatru+Timisoara",
+    locality: "Timișoara",
+    address: "Strada Gheorghe Lazăr 5",
+    sourceLabel: "Date publice · neconfirmat de furnizor",
+  },
+  {
+    name: "Kidgineers",
+    category: "Educație · STEM · robotică",
+    description: "Activități educaționale din zona roboticii și STEM pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=Kidgineers+Timisoara",
+    locality: "Timișoara",
+    address: "Strada Crișul 7",
+    sourceLabel: "Date publice · neconfirmat de furnizor",
+  },
+  {
+    name: "ARTASIA – Arta de a Vorbi",
+    category: "Artă · teatru · comunicare",
+    description: "Activități de teatru, vorbire și ateliere creative pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=ARTASIA+Arta+De+A+Vorbi+Timisoara",
+    locality: "Timișoara",
+    address: "Piața Iancu Huniade 2, camera 24",
+    sourceLabel: "Date publice · neconfirmat de furnizor",
+  },
+  {
+    name: "MAGNUM Place",
+    category: "Sport · dans",
+    description: "Activități de dans sportiv pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=MAGNUM+Place+Timisoara",
+    locality: "Timișoara",
+    address: "Strada Divizia 9 Cavalerie 21A",
+    sourceLabel: "Date publice · neconfirmat de furnizor",
+  },
+  {
+    name: "Academia Steluțelor",
+    category: "Afterschool · activități extracurriculare",
+    description: "Program afterschool și activități extracurriculare pentru copii.",
+    url: "https://academia-stelutelor.ro/servicii/",
+    locality: "Timișoara",
+    address: "Strada Salcâmilor 7",
+    sourceLabel: "Site oficial · listare neconfirmată",
   },
 ];
 
@@ -188,7 +252,7 @@ export default function ProviderDirectory() {
               <span className="provider-card-category">{provider.category}</span>
               <h3>{provider.name}</h3>
               <p>{provider.description}</p>
-              <span className="provider-location"><MapPin size={14}/>{provider.locality}</span>
+              <span className="provider-location"><MapPin size={14}/>{provider.locality}{provider.address ? ` · ${provider.address}` : ""}</span>
               <a className="text-link" href={provider.url} target="_blank" rel="noopener noreferrer">
                 {provider.sourceLabel} <ExternalLink size={15}/>
               </a>
