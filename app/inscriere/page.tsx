@@ -24,11 +24,15 @@ export default function SignUpPage() {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { full_name: name, role: "parent" } }
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/cont`,
+          // The database trigger assigns the parent role; never accept roles from user metadata.
+          data: { full_name: name },
+        },
       });
       if (error) throw error;
       if (data.session) {
-        router.push("/cont");
+        router.replace("/cont");
         router.refresh();
       } else {
         setNotice("Contul a fost creat. Verifică emailul pentru confirmarea adresei.");

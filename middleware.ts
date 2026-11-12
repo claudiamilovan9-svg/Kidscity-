@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  // getUser() validates the session with Supabase Auth; do not trust cookie contents alone.
+  // Validate the session with Supabase Auth; do not trust cookie contents alone.
   const { data: { user }, error } = await supabase.auth.getUser();
 
   if (error || !user) {
