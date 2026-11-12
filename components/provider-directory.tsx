@@ -144,12 +144,100 @@ const publicProviders: PublicProvider[] = [
     address: "Strada Salcâmilor 7",
     sourceLabel: "Site oficial · listare neconfirmată",
   },
+
+  {
+    name: "YuHuu Land",
+    category: "Afterschool · joacă · ateliere · petreceri",
+    description: "Centru pentru copii cu afterschool, spații de joacă și ateliere educative și creative.",
+    url: "https://www.google.com/maps/search/?api=1&query=YuHuu+Land+Timisoara",
+    locality: "Timișoara",
+    address: "Strada Panselelor 47",
+    sourceLabel: "Date publice · listare neconfirmată",
+  },
+  {
+    name: "Kindertruppe",
+    category: "Afterschool · limba germană",
+    description: "Centru afterschool cu sprijin educațional și activități pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=Kindertruppe+Timisoara",
+    locality: "Timișoara",
+    address: "Strada Ciocârliei 88",
+    sourceLabel: "Date publice · listare neconfirmată",
+  },
+  {
+    name: "Discovery Smart Kids Club",
+    category: "Educație · afterschool · ateliere",
+    description: "Centru educațional și afterschool cu activități creative și opționale.",
+    url: "https://www.google.com/maps/search/?api=1&query=Discovery+Smart+Kids+Club+Timisoara",
+    locality: "Timișoara",
+    address: "Strada Lacului 1H",
+    sourceLabel: "Date publice · listare neconfirmată",
+  },
+  {
+    name: "Clubul Copiilor",
+    category: "Afterschool · limbi străine · evenimente",
+    description: "Centru pentru copii cu programe educative, activități recreative și ateliere.",
+    url: "https://www.clubulcopiilor.ro/activitati-copii-in-timisoara/",
+    locality: "Timișoara",
+    address: "Strada Martir Cernăianu 16",
+    sourceLabel: "Director public · listare neconfirmată",
+  },
+  {
+    name: "Beautiful Dance by Daniela",
+    category: "Dans · balet",
+    description: "Cursuri de dans și balet pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=Beautiful+Dance+by+Daniela+Timisoara",
+    locality: "Timișoara",
+    sourceLabel: "Director public · listare neconfirmată",
+  },
+  {
+    name: "Atelierul de Povești",
+    category: "Artă · teatru · scriere creativă",
+    description: "Ateliere și cursuri de actorie, teatru și scriere creativă pentru copii.",
+    url: "https://www.clubulcopiilor.ro/activitati-copii-in-timisoara/",
+    locality: "Timișoara",
+    sourceLabel: "Director public · listare neconfirmată",
+  },
+  {
+    name: "STURZ – Centrul de Cercetare și Dezvoltare a Educației pentru Familie",
+    category: "Educație · STEM · robotică",
+    description: "Activități educaționale și cursuri de robotică și programare pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=STURZ+Timisoara",
+    locality: "Timișoara",
+    sourceLabel: "Director public · listare neconfirmată",
+  },
+  {
+    name: "Academia Mămicilor din Timișoara",
+    category: "Artă · creativitate · ateliere",
+    description: "Ateliere creative și activități tematice pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=Academia+Mamicilor+Timisoara",
+    locality: "Timișoara",
+    sourceLabel: "Director public · listare neconfirmată",
+  },
+  {
+    name: "Craft Hub",
+    category: "Artă · pictură · lucru manual",
+    description: "Ateliere de pictură și activități creative pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=Craft+Hub+Timisoara",
+    locality: "Timișoara",
+    sourceLabel: "Director public · listare neconfirmată",
+  },
+  {
+    name: "MGA Moga Art Gallery",
+    category: "Artă · pictură · creativitate",
+    description: "Ateliere creative și activități artistice pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=MGA+Moga+Art+Gallery+Timisoara",
+    locality: "Timișoara",
+    sourceLabel: "Director public · listare neconfirmată",
+  },
 ];
 
 export default function ProviderDirectory() {
   const [providers, setProviders] = useState<Provider[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [directorySearch, setDirectorySearch] = useState("");
+  const [directoryCategory, setDirectoryCategory] = useState("");
+  const [directoryLocality, setDirectoryLocality] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -201,8 +289,16 @@ export default function ProviderDirectory() {
     return () => { active = false; };
   }, []);
 
+  const categories = [...new Set(publicProviders.map(provider => provider.category.split(" · ")[0]))].sort((a, b) => a.localeCompare(b, "ro"));
+  const localities = [...new Set(publicProviders.map(provider => provider.locality))].sort((a, b) => a.localeCompare(b, "ro"));
+  const filteredPublicProviders = publicProviders.filter(provider => {
+    const term = directorySearch.trim().toLocaleLowerCase("ro");
+    const matchesSearch = !term || [provider.name, provider.category, provider.description, provider.locality, provider.address].some(value => value?.toLocaleLowerCase("ro").includes(term));
+    return matchesSearch && (!directoryCategory || provider.category.startsWith(directoryCategory)) && (!directoryLocality || provider.locality === directoryLocality);
+  });
+
   return (
-    <section className="provider-directory">
+    <section className="provider-directory" id="furnizori">
       <div className="provider-directory-heading">
         <span className="eyebrow"><Store size={14}/> COMUNITATEA KIDSCITY</span>
         <h2>Furnizori pentru <span>copilul tău</span></h2>
@@ -233,10 +329,17 @@ export default function ProviderDirectory() {
         </>
       )}
 
-      <h3 className="provider-group-title">Pagini publice ale furnizorilor locali</h3>
+      <h3 className="provider-group-title">Explorează furnizorii locali</h3>
+      <div className="directory-tools provider-directory-tools">
+        <label className="directory-search"><Search size={18}/><input value={directorySearch} onChange={event => setDirectorySearch(event.target.value)} placeholder="Caută furnizor, dans, STEM, afterschool..." /></label>
+        <label><span>Categorie</span><select value={directoryCategory} onChange={event => setDirectoryCategory(event.target.value)}><option value="">Toate categoriile</option>{categories.map(value => <option key={value} value={value}>{value}</option>)}</select></label>
+        <label><span>Localitate</span><select value={directoryLocality} onChange={event => setDirectoryLocality(event.target.value)}><option value="">Toate localitățile</option>{localities.map(value => <option key={value}>{value}</option>)}</select></label>
+        <button className="filter-reset" onClick={() => { setDirectorySearch(""); setDirectoryCategory(""); setDirectoryLocality(""); }}>Resetează filtrele</button>
+      </div>
+      <p className="provider-directory-note">{filteredPublicProviders.length} furnizori găsiți. Linkurile duc către site-uri sau directoare publice; listarea nu înseamnă parteneriat confirmat.</p>
       <p className="provider-directory-note">Acestea sunt linkuri externe către paginile publice ale organizațiilor. KidsCity nu confirmă disponibilitatea locurilor sau actualitatea tarifelor; verifică direct cu furnizorul.</p>
       <div className="provider-grid">
-        {publicProviders.map(provider => (
+        {filteredPublicProviders.map(provider => (
           <article className="provider-card provider-card-featured" key={provider.name}>
             {provider.image ? (
               <div className="provider-card-photo">
@@ -260,6 +363,7 @@ export default function ProviderDirectory() {
           </article>
         ))}
       </div>
+      {filteredPublicProviders.length === 0 && <div className="directory-state"><strong>Nu am găsit furnizori pentru filtrele alese.</strong><button className="filter-reset" onClick={() => { setDirectorySearch(""); setDirectoryCategory(""); setDirectoryLocality(""); }}>Resetează filtrele</button></div>}
     </section>
   );
 }
