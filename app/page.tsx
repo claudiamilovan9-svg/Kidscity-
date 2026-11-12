@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, MapPin, Heart, ShieldCheck, Sparkles, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
+import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
 import ActivityDirectory from "@/components/activity-directory";
 
 const categories = [
