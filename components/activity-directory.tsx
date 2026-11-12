@@ -59,6 +59,12 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
   const [maxPrice, setMaxPrice] = useState("");
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearch(params.get("q") ?? "");
+    setLocality(params.get("locality") ?? "");
+  }, []);
+
+  useEffect(() => {
     let active = true;
     async function load() {
       try {
