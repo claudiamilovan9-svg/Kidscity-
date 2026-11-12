@@ -62,6 +62,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
     const params = new URLSearchParams(window.location.search);
     setSearch(params.get("q") ?? "");
     setLocality(params.get("locality") ?? "");
+    setCategory(params.get("category") ?? "");
   }, []);
 
   useEffect(() => {
@@ -135,7 +136,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
   const reset = () => { setSearch(""); setLocality(""); setCategory(""); setAge(""); setMaxPrice(""); };
 
   return (
-    <section className={compact ? "directory-section directory-compact" : "directory-section directory-full"} id="furnizori">
+    <section className={compact ? "directory-section directory-compact" : "directory-section directory-full"} id="catalog-activitati">
       <div className="directory-heading">
         <div>
           <span className="eyebrow"><Sparkles size={14}/> CATALOG KIDSCITY</span>
@@ -157,7 +158,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
       <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Activități din surse publice · confirmare directă necesară</span></div>
       {loading ? <div className="directory-state"><LoaderCircle className="spin" size={25}/> Încărcăm opțiunile pentru familia ta...</div> :
         error ? <div className="directory-state directory-error">{error}</div> :
-        filtered.length === 0 ? <div className="directory-state"><strong>Momentan nu am găsit activități pentru aceste filtre.</strong><span>Încearcă o altă categorie sau resetează filtrele.</span><button className="filter-reset" onClick={reset}>Resetează filtrele</button></div> :
+        filtered.length === 0 ? <div className="directory-state"><strong>{locality ? `Nu avem încă activități publicate în ${locality}.` : "Momentan nu am găsit activități pentru aceste filtre."}</strong><span>{locality ? "Catalogul pentru această localitate este în curs de completare. Poți încerca Timișoara sau poți reseta filtrele." : "Încearcă o altă categorie sau resetează filtrele."}</span><button className="filter-reset" onClick={reset}>Resetează filtrele</button></div> :
         compact ? <div className="directory-category-list">{grouped.map(([name, items]) => (
           <section className="directory-category" key={name}>
             <div className="directory-category-heading"><h3>{name}</h3><span>{items.length} {items.length === 1 ? "activitate" : "activități"}</span></div>
