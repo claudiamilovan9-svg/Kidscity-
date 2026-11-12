@@ -133,7 +133,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
       <div className="directory-heading">
         <div>
           <span className="eyebrow"><Sparkles size={14}/> CATALOG KIDSCITY</span>
-          <h2>{compact ? <>Descoperă furnizori <span>din apropiere</span></> : <>Găsește activitatea <span>potrivită</span></>}</h2>
+          <h2>{compact ? <>Descoperă activități <span>din apropiere</span></> : <>Găsește activitatea <span>potrivită</span></>}</h2>
           <p>Explorează activități identificate în surse publice. Verifică direct cu organizatorul programul, tariful și locurile disponibile înainte de înscriere.</p>
         </div>
         {compact && <Link className="text-link" href="/activitati">Vezi toate activitățile <ArrowRight size={16}/></Link>}
@@ -144,7 +144,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         <label><span>Localitate</span><select value={locality} onChange={e => setLocality(e.target.value)}><option value="">Toate localitățile</option>{localities.map(v => <option key={v}>{v}</option>)}</select></label>
         <label><span>Categorie</span><select value={category} onChange={e => setCategory(e.target.value)}><option value="">Toate categoriile</option>{categories.map(v => <option key={v.slug} value={v.slug}>{v.name}</option>)}</select></label>
         <label><span>Vârsta copilului</span><select value={age} onChange={e => setAge(e.target.value)}><option value="">Orice vârstă</option>{ageOptions.map(v => <option key={v.label}>{v.label}</option>)}</select></label>
-        <label><span>Buget maxim</span><select value={maxPrice} onChange={e => setMaxPrice(e.target.value)}><option value="">Orice buget</option><option value="50">Până la 50 lei</option><option value="100">Până la 100 lei</option><option value="150">Până la 150 lei</option><option value="250">Până la 250 lei</option></select></label>
+        <label><span>Buget maxim</span><select value={maxPrice} onChange={e => setMaxPrice(e.target.value)}><option value="">Orice buget</option><option value="50">Până la 50 lei</option><option value="100">Până la 100 lei</option><option value="150">Până la 150 lei</option><option value="250">Până la 250 lei</option><option value="350">Până la 350 lei</option><option value="400">Până la 400 lei</option></select></label>
         <button className="filter-reset" onClick={reset}><SlidersHorizontal size={15}/> Resetează</button>
       </div>
 
