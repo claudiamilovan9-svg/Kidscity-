@@ -21,17 +21,25 @@ export default function SignUpPage() {
     setLoading(true);
     try {
       const supabase = createClient();
+      const emailRedirectTo = new URL(
+        "/auth/callback?next=%2Fcont",
+        window.location.origin
+      ).toString();
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { full_name: name, role: "parent" } }
+        options: {
+          data: { full_name: name, role: "parent" },
+          emailRedirectTo
+        }
       });
       if (error) throw error;
       if (data.session) {
         router.push("/cont");
         router.refresh();
       } else {
-        setNotice("Contul a fost creat. Verifică emailul pentru confirmarea adresei.");
+        setNotice("Contul a fost creat. Verifică emailul și deschide linkul de confirmare pe acest dispozitiv sau pe oricare altul. Linkul te va întoarce în KidsCity.");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Înregistrarea nu a reușit.");
