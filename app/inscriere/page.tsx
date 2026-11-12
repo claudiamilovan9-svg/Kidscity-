@@ -22,7 +22,7 @@ export default function SignUpPage() {
     try {
       const supabase = createClient();
       const emailRedirectTo = new URL(
-        "/auth/callback?next=%2Fcont",
+        "/auth/confirm?next=%2Fcont",
         window.location.origin
       ).toString();
 
@@ -39,7 +39,7 @@ export default function SignUpPage() {
         router.push("/cont");
         router.refresh();
       } else {
-        setNotice("Contul a fost creat. Verifică emailul și deschide linkul de confirmare pe acest dispozitiv sau pe oricare altul. Linkul te va întoarce în KidsCity.");
+        setNotice("Contul a fost creat. Verifică emailul și deschide linkul de confirmare. Te va conecta în KidsCity chiar dacă deschizi mesajul pe alt dispozitiv.");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Înregistrarea nu a reușit.");
