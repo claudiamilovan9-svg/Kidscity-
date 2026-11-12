@@ -20,6 +20,18 @@ type Activity = {
   location: { address: string; locality: { name: string } | null } | null;
 };
 
+const fallbackLocalities = ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița Nouă", "Ghiroda"];
+const fallbackCategories = [
+  { slug: "sport-miscare", name: "Sport și mișcare" },
+  { slug: "arta-creativitate", name: "Artă și creativitate" },
+  { slug: "educatie-stem", name: "Educație și STEM" },
+  { slug: "muzica", name: "Muzică" },
+  { slug: "limbi-straine", name: "Limbi străine" },
+  { slug: "natura-aventura", name: "Natură și aventură" },
+  { slug: "petreceri-evenimente", name: "Petreceri și evenimente" },
+  { slug: "after-school-ingrijire", name: "After-school și îngrijire" },
+];
+
 const ageOptions = [
   { label: "0–2 ani", min: 0, max: 24 },
   { label: "3–5 ani", min: 36, max: 71 },
@@ -61,11 +73,11 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
     return () => { active = false; };
   }, []);
 
-  const localities = useMemo(() => [...new Set(activities.map(a => a.location?.locality?.name).filter(Boolean))].sort() as string[], [activities]);
+  const localities = useMemo(() => [...new Set([...fallbackLocalities, ...activities.map(a => a.location?.locality?.name).filter(Boolean) as string[]])].sort((a, b) => a.localeCompare(b, "ro")), [activities]);
   const categories = useMemo(() => {
     const values = new Map<string, string>();
     activities.forEach(a => { if (a.category?.slug && a.category.name) values.set(a.category.slug, a.category.name); });
-    return [...values].map(([slug, name]) => ({ slug, name })).sort((a, b) => a.name.localeCompare(b.name, "ro"));
+    return [...new Map([...fallbackCategories, ...values].map(item => [item.slug, item])).values()].sort((a, b) => a.name.localeCompare(b.name, "ro"));
   }, [activities]);
 
   const filtered = useMemo(() => activities.filter(a => {
@@ -105,7 +117,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         <div>
           <span className="eyebrow"><Sparkles size={14}/> CATALOG KIDSCITY</span>
           <h2>{compact ? <>Descoperă furnizori <span>din apropiere</span></> : <>Găsește activitatea <span>potrivită</span></>}</h2>
-          <p>Explorează activități publicate de furnizori aprobați și filtrează după nevoile familiei tale.</p>
+          <p>Explorează ofertele publicate de furnizori aprobați. Filtrele după categorie, vârstă, localitate și buget se aplică ofertelor disponibile.</p>
         </div>
         {compact && <Link className="text-link" href="/activitati">Vezi toate activitățile <ArrowRight size={16}/></Link>}
       </div>
@@ -119,7 +131,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         <button className="filter-reset" onClick={reset}><SlidersHorizontal size={15}/> Resetează</button>
       </div>
 
-      <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Doar oferte publicate de furnizori aprobați</span></div>
+      <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Oferte publicate de furnizori aprobați</span></div>
       {loading ? <div className="directory-state"><LoaderCircle className="spin" size={25}/> Încărcăm opțiunile pentru familia ta...</div> :
         error ? <div className="directory-state directory-error">{error}</div> :
         filtered.length === 0 ? <div className="directory-state"><strong>Momentan nu am găsit activități pentru aceste filtre.</strong><span>Încearcă o altă categorie sau resetează filtrele.</span><button className="filter-reset" onClick={reset}>Resetează filtrele</button></div> :
@@ -131,7 +143,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         ))}</div> : <div className="activity-grid">{filtered.map(renderActivityCard)}</div>
       }
       {compact && filtered.length > 6 && <div className="directory-more"><Link className="button" href="/activitati">Vezi toate cele {filtered.length} activități <ArrowRight size={16}/></Link></div>}
-      {!loading && !error && activities.length === 0 && <p className="directory-footnote">Catalogul se va completa pe măsură ce furnizorii își publică activitățile. Nu afișăm profiluri sau oferte demonstrative ca și cum ar fi reale.</p>}
+      {!loading && !error && activities.length === 0 && <p className="directory-footnote">Nu există încă activități publicate în catalog. Furnizorii din secțiunea de mai sus pot fi contactați direct; ofertele, prețurile și disponibilitatea vor apărea aici după publicare.</p>}
     </section>
   );
 }
