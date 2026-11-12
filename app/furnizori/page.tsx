@@ -11,9 +11,9 @@ export default function ProvidersPage() {
       </header>
       <div className="listing-intro">
         <Link className="back-home" href="/"><ArrowLeft size={14}/> Pagina principală</Link>
-        <span className="eyebrow">PARTENERII NOȘTRI</span>
-        <h1>Descoperă <span>furnizorii KidsCity</span></h1>
-        <p>Explorează furnizorii aprobați și descoperă activitățile pe care le pregătesc pentru cei mici.</p>
+        <span className="eyebrow">FURNIZORI DIN COMUNITATE</span>
+        <h1>Descoperă <span>furnizori locali</span></h1>
+        <p>Explorează furnizori identificați în surse publice. Prezența în catalog nu înseamnă parteneriat sau listare confirmată de furnizor.</p>
       </div>
       <ProviderDirectory />
     </main>
