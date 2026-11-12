@@ -12,12 +12,20 @@ type Activity = {
   description: string;
   min_age_months: number;
   max_age_months: number;
-  price_amount: number | null;
-  currency: string;
+  price_min_amount: number | null;
+  price_max_amount: number | null;
+  price_label: string;
   price_unit: string;
-  provider: { business_name: string; slug: string } | null;
+  provider_name: string;
+  provider_website: string | null;
+  contact_phone: string | null;
+  source_url: string;
+  schedule_text: string | null;
+  duration_minutes: number | null;
+  listing_status: "needs_confirmation" | "seasonal" | "closed";
+  status_note: string;
   category: { name: string; slug: string } | null;
-  location: { address: string; locality: { name: string } | null } | null;
+  location: { name: string } | null;
 };
 
 const fallbackLocalities = ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița Nouă", "Ghiroda"];
@@ -56,13 +64,13 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
       try {
         const supabase = createClient();
         const { data, error: queryError } = await supabase
-          .from("activities")
-          .select("id,title,slug,description,min_age_months,max_age_months,price_amount,currency,price_unit,provider:provider_profiles!inner(business_name,slug),category:categories(name,slug),location:provider_locations(address,locality:localities(name))")
-          .eq("is_active", true)
-          .eq("provider.status", "approved")
-          .order("published_at", { ascending: false, nullsFirst: false });
+          .from("activity_catalog_entries")
+          .select("id,activity_title,slug,description,min_age_months,max_age_months,price_min_amount,price_max_amount,price_label,price_unit,provider_name,provider_website,contact_phone,source_url,schedule_text,duration_minutes,listing_status,status_note,category:categories(name,slug),location:localities(name)")
+          .eq("is_visible", true)
+          .neq("listing_status", "closed")
+          .order("last_checked_at", { ascending: false });
         if (queryError) throw queryError;
-        if (active) setActivities((data ?? []) as unknown as Activity[]);
+        if (active) setActivities((data ?? []).map((row: any) => ({ ...row, title: row.activity_title })) as Activity[]);
       } catch {
         if (active) setError("Nu am putut încărca activitățile. Te rugăm să încerci din nou.");
       } finally {
@@ -73,7 +81,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
     return () => { active = false; };
   }, []);
 
-  const localities = useMemo(() => [...new Set([...fallbackLocalities, ...activities.map(a => a.location?.locality?.name).filter(Boolean) as string[]])].sort((a, b) => a.localeCompare(b, "ro")), [activities]);
+  const localities = useMemo(() => [...new Set([...fallbackLocalities, ...activities.map(a => a.location?.name).filter(Boolean) as string[]])].sort((a, b) => a.localeCompare(b, "ro")), [activities]);
   const categories = useMemo(() => {
     const values = new Map<string, string>();
     activities.forEach(a => { if (a.category?.slug && a.category.name) values.set(a.category.slug, a.category.name); });
@@ -84,10 +92,10 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
 
   const filtered = useMemo(() => activities.filter(a => {
     const term = search.trim().toLocaleLowerCase("ro");
-    const matchesSearch = !term || [a.title, a.description, a.provider?.business_name, a.category?.name, a.location?.locality?.name].some(v => v?.toLocaleLowerCase("ro").includes(term));
+    const matchesSearch = !term || [a.title, a.description, a.provider_name, a.category?.name, a.location?.name].some(v => v?.toLocaleLowerCase("ro").includes(term));
     const matchesAge = !age || (() => { const option = ageOptions.find(o => o.label === age); return !!option && a.min_age_months <= option.max && a.max_age_months >= option.min; })();
-    const matchesPrice = !maxPrice || (a.price_amount !== null && a.price_amount <= Number(maxPrice));
-    return matchesSearch && (!locality || a.location?.locality?.name === locality) && (!category || a.category?.slug === category) && matchesAge && matchesPrice;
+    const matchesPrice = !maxPrice || (a.price_max_amount !== null && a.price_max_amount <= Number(maxPrice));
+    return matchesSearch && (!locality || a.location?.name === locality) && (!category || a.category?.slug === category) && matchesAge && matchesPrice;
   }), [activities, search, locality, category, age, maxPrice]);
 
   const grouped = useMemo(() => {
@@ -101,13 +109,20 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
 
   const renderActivityCard = (activity: Activity) => (
     <article className="activity-card" key={activity.id}>
-      <div className="activity-card-art"><span>{activity.category?.name ?? "Activitate pentru copii"}</span><b>{activity.provider?.business_name?.slice(0, 1).toLocaleUpperCase("ro") ?? "K"}</b></div>
+      <div className="activity-card-art"><span>{activity.category?.name ?? "Activitate pentru copii"}</span><b>{activity.provider_name?.slice(0, 1).toLocaleUpperCase("ro") ?? "K"}</b></div>
       <div className="activity-card-body">
-        <span className="activity-provider">{activity.provider?.business_name}</span>
+        <span className="activity-provider">{activity.provider_name}</span>
         <h3>{activity.title}</h3>
         <p>{activity.description}</p>
-        <div className="activity-meta"><span><MapPin size={14}/>{activity.location?.locality?.name ?? "Locație de confirmat"}</span><span>{activity.min_age_months === 0 ? "De la 0 ani" : `De la ${Math.floor(activity.min_age_months / 12)} ani`} · până la {Math.floor(activity.max_age_months / 12)} ani</span></div>
-        <div className="activity-card-bottom"><strong>{activity.price_amount === null ? "Preț la cerere" : `${activity.price_amount} ${activity.currency}`}</strong><span>Ofertă publicată</span></div>
+        <div className="activity-meta"><span><MapPin size={14}/>{activity.location?.name ?? "Locație de confirmat"}</span><span>{activity.min_age_months === 0 ? "De la 0 ani" : `De la ${Math.floor(activity.min_age_months / 12)} ani`} · până la {Math.floor(activity.max_age_months / 12)} ani</span></div>
+        {activity.schedule_text && <p className="activity-schedule">{activity.schedule_text}</p>}
+        <div className="activity-card-bottom"><strong>{activity.price_label}</strong><span>{activity.duration_minutes ? `${activity.duration_minutes} min / ședință` : "Detalii la organizator"}</span></div>
+        <p className="activity-catalog-note">{activity.status_note}</p>
+        <div className="activity-card-links">
+          {activity.provider_website && <a href={activity.provider_website} target="_blank" rel="noopener noreferrer">Site organizator</a>}
+          <a href={activity.source_url} target="_blank" rel="noopener noreferrer">Sursa informațiilor</a>
+          {activity.contact_phone && <a href={`tel:${activity.contact_phone.replace(/[^+0-9]/g, "")}`}>Sună: {activity.contact_phone}</a>}
+        </div>
       </div>
     </article>
   );
@@ -119,7 +134,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         <div>
           <span className="eyebrow"><Sparkles size={14}/> CATALOG KIDSCITY</span>
           <h2>{compact ? <>Descoperă furnizori <span>din apropiere</span></> : <>Găsește activitatea <span>potrivită</span></>}</h2>
-          <p>Explorează ofertele publicate de furnizori aprobați. Filtrele după categorie, vârstă, localitate și buget se aplică ofertelor disponibile.</p>
+          <p>Explorează activități identificate în surse publice. Verifică direct cu organizatorul programul, tariful și locurile disponibile înainte de înscriere.</p>
         </div>
         {compact && <Link className="text-link" href="/activitati">Vezi toate activitățile <ArrowRight size={16}/></Link>}
       </div>
@@ -133,7 +148,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         <button className="filter-reset" onClick={reset}><SlidersHorizontal size={15}/> Resetează</button>
       </div>
 
-      <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Oferte publicate de furnizori aprobați</span></div>
+      <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Activități din surse publice · confirmare directă necesară</span></div>
       {loading ? <div className="directory-state"><LoaderCircle className="spin" size={25}/> Încărcăm opțiunile pentru familia ta...</div> :
         error ? <div className="directory-state directory-error">{error}</div> :
         filtered.length === 0 ? <div className="directory-state"><strong>Momentan nu am găsit activități pentru aceste filtre.</strong><span>Încearcă o altă categorie sau resetează filtrele.</span><button className="filter-reset" onClick={reset}>Resetează filtrele</button></div> :
@@ -145,7 +160,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         ))}</div> : <div className="activity-grid">{filtered.map(renderActivityCard)}</div>
       }
       {compact && filtered.length > 6 && <div className="directory-more"><Link className="button" href="/activitati">Vezi toate cele {filtered.length} activități <ArrowRight size={16}/></Link></div>}
-      {!loading && !error && activities.length === 0 && <p className="directory-footnote">Nu există încă activități publicate în catalog. Furnizorii din secțiunea de mai sus pot fi contactați direct; ofertele, prețurile și disponibilitatea vor apărea aici după publicare.</p>}
+      {!loading && !error && activities.length === 0 && <p className="directory-footnote">Catalogul se completează din informații publice; fiecare organizator trebuie să confirme tariful, orarul și disponibilitatea actuală.</p>}
     </section>
   );
 }
