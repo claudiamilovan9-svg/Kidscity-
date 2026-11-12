@@ -13,7 +13,7 @@ export default function ActivitiesPage() {
         <Link className="back-home" href="/"><ArrowLeft size={14}/> Pagina principală</Link>
         <span className="eyebrow">DESCOPERĂ ȘI ALEGE</span>
         <h1>Activități pentru <span>copilul tău</span></h1>
-        <p>Compară opțiunile reale publicate de furnizorii KidsCity. Folosește filtrele ca să găsești rapid ce se potrivește familiei tale.</p>
+        <p>Explorează activități identificate în surse publice. Confirmă direct cu organizatorul programul, tariful și locurile disponibile înainte de înscriere.</p>
       </div>
       <ActivityDirectory />
     </main>
