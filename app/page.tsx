@@ -12,6 +12,15 @@ const categories = [
   { name: "Ateliere & evenimente", detail: "Experiențe de ținut minte", icon: PartyPopper, tone: "blue" }
 ];
 
+const categoryRoutes: Record<string, string> = {
+  "Creșe & grădinițe": "after-school-ingrijire",
+  "Sport & mișcare": "sport-miscare",
+  "Artă & creativitate": "arta-creativitate",
+  "Limbi străine": "limbi-straine",
+  "Muzică & dans": "muzica",
+  "Ateliere & evenimente": "petreceri-evenimente",
+};
+
 const places = ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița Nouă", "Ghiroda"];
 
 export default function Home() {
@@ -67,10 +76,10 @@ export default function Home() {
 
       <section className="section" id="categorii">
         <div className="section-heading"><div><span className="eyebrow">DESCOPERĂ CE I SE POTRIVEȘTE</span><h2>Explorează după <span>categorie</span></h2></div><Link className="text-link" href="/activitati">Toate categoriile <ArrowRight size={16}/></Link></div>
-        <div className="category-grid">{categories.map(({name,detail,icon:Icon,tone}) => <Link className="category-card" href="/activitati" key={name}><span className={"category-icon "+tone}><Icon size={25}/></span><strong>{name}</strong><small>{detail}</small><ArrowRight className="category-arrow" size={18}/></Link>)}</div>
+        <div className="category-grid">{categories.map(({name,detail,icon:Icon,tone}) => <Link className="category-card" href={`/activitati?category=${categoryRoutes[name]}`} key={name}><span className={"category-icon "+tone}><Icon size={25}/></span><strong>{name}</strong><small>{detail}</small><ArrowRight className="category-arrow" size={18}/></Link>)}</div>
       </section>
 
-      <section className="local-section"><div><span className="eyebrow">APROAPE DE FAMILIA TA</span><h2>Descoperă activități <span>în zona ta</span></h2><p>Începem în Timișoara și comunitățile din jur, cu planuri de extindere în alte orașe.</p></div><div className="place-list">{places.map(place => <Link href="/activitati" key={place}><MapPin size={16}/>{place}<ArrowRight size={15}/></Link>)}</div></section>
+      <section className="local-section"><div><span className="eyebrow">APROAPE DE FAMILIA TA</span><h2>Descoperă activități <span>în zona ta</span></h2><p>Începem în Timișoara și comunitățile din jur, cu planuri de extindere în alte orașe.</p></div><div className="place-list">{places.map(place => <Link href={`/activitati?locality=${encodeURIComponent(place)}`} key={place}><MapPin size={16}/>{place}<ArrowRight size={15}/></Link>)}</div></section>
 
       <section className="section how-section" id="cum-functioneaza"><div className="section-heading"><div><span className="eyebrow">SIMPLU PENTRU PĂRINȚI</span><h2>Trei pași spre o experiență <span>grozavă</span></h2></div></div><div className="steps"><article><span>01</span><h3>Spune-ne ce îi place</h3><p>Alege vârsta, zona și activitățile care îl atrag pe copilul tău.</p></article><article><span>02</span><h3>Descoperă opțiunile</h3><p>Compară activități și furnizori într-un singur loc.</p></article><article><span>03</span><h3>Trimite o solicitare</h3><p>Cere un loc, iar furnizorul îți va confirma disponibilitatea.</p></article></div></section>
 
