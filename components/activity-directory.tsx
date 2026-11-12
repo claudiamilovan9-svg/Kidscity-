@@ -130,20 +130,6 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
           </section>
         ))}</div> : <div className="activity-grid">{filtered.map(renderActivityCard)}</div>
       }
- :
-        <div className="activity-grid">{visible.map(activity => (
-          <article className="activity-card" key={activity.id}>
-            <div className="activity-card-art"><span>{activity.category?.name ?? "Activitate pentru copii"}</span><b>{activity.provider?.business_name?.slice(0, 1).toLocaleUpperCase("ro") ?? "K"}</b></div>
-            <div className="activity-card-body">
-              <span className="activity-provider">{activity.provider?.business_name}</span>
-              <h3>{activity.title}</h3>
-              <p>{activity.description}</p>
-              <div className="activity-meta"><span><MapPin size={14}/>{activity.location?.locality?.name ?? "Locație de confirmat"}</span><span>{activity.min_age_months === 0 ? "De la 0 ani" : `De la ${Math.floor(activity.min_age_months / 12)} ani`} · până la {Math.floor(activity.max_age_months / 12)} ani</span></div>
-              <div className="activity-card-bottom"><strong>{activity.price_amount === null ? "Preț la cerere" : `${activity.price_amount} ${activity.currency}`}</strong><span>Ofertă publicată</span></div>
-            </div>
-          </article>
-        ))}</div>
-      }
       {compact && filtered.length > 6 && <div className="directory-more"><Link className="button" href="/activitati">Vezi toate cele {filtered.length} activități <ArrowRight size={16}/></Link></div>}
       {!loading && !error && activities.length === 0 && <p className="directory-footnote">Catalogul se va completa pe măsură ce furnizorii își publică activitățile. Nu afișăm profiluri sau oferte demonstrative ca și cum ar fi reale.</p>}
     </section>
