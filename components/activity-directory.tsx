@@ -111,7 +111,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
               <h3>{activity.title}</h3>
               <p>{activity.description}</p>
               <div className="activity-meta"><span><MapPin size={14}/>{activity.location?.locality?.name ?? "Locație de confirmat"}</span><span>{activity.min_age_months === 0 ? "De la 0 ani" : `De la ${Math.floor(activity.min_age_months / 12)} ani`} · până la {Math.floor(activity.max_age_months / 12)} ani</span></div>
-              <div className="activity-card-bottom"><strong>{activity.price_amount === null ? "Preț la cerere" : `${activity.price_amount} ${activity.currency}`}</strong><Link href={`/activitati?activitate=${encodeURIComponent(activity.slug)}`}>Vezi activitatea <ArrowRight size={15}/></Link></div>
+              <div className="activity-card-bottom"><strong>{activity.price_amount === null ? "Preț la cerere" : `${activity.price_amount} ${activity.currency}`}</strong><span>Ofertă publicată</span></div>
             </div>
           </article>
         ))}</div>
