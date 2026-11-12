@@ -28,11 +28,26 @@ export default function Home() {
           <div className="eyebrow"><Sparkles size={15}/> LUMEA ACTIVITĂȚILOR PENTRU COPII</div>
           <h1>Copilăria e plină de <span>posibilități.</span></h1>
           <p className="hero-lead">Descoperă locuri, cursuri și experiențe care îl ajută pe cel mic să crească, să învețe și să se bucure.</p>
-          <div className="search-panel">
-            <label><Search size={18}/><span><small>Ce căutăm?</small><strong>Sport, artă, grădiniță...</strong></span></label>
-            <label><MapPin size={18}/><span><small>Unde?</small><strong>Timișoara și împrejurimi</strong></span></label>
-            <Link href="/activitati" className="button search-button">Descoperă <ArrowRight size={17}/></Link>
-          </div>
+          <form className="search-panel" action="/activitati" method="get">
+            <label>
+              <Search size={18}/>
+              <span><small htmlFor="home-search">Ce căutăm?</small><input id="home-search" name="q" type="search" placeholder="Sport, artă, dans..." /></span>
+            </label>
+            <label>
+              <MapPin size={18}/>
+              <span><small htmlFor="home-locality">Unde?</small>
+                <select id="home-locality" name="locality" defaultValue="">
+                  <option value="">Toate localitățile</option>
+                  <option value="Timișoara">Timișoara</option>
+                  <option value="Dumbrăvița">Dumbrăvița</option>
+                  <option value="Giroc">Giroc</option>
+                  <option value="Moșnița Nouă">Moșnița Nouă</option>
+                  <option value="Ghiroda">Ghiroda</option>
+                </select>
+              </span>
+            </label>
+            <button type="submit" className="button search-button">Descoperă <ArrowRight size={17}/></button>
+          </form>
           <div className="hero-note"><ShieldCheck size={16}/> Furnizori locali · activități pentru fiecare vârstă</div>
         </div>
         <div className="hero-art" aria-label="Ilustrație decorativă cu forme colorate">
