@@ -34,6 +34,25 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(signInUrl);
   }
 
+  // Authentication alone is not enough for role-specific dashboards.
+  const path = request.nextUrl.pathname;
+  if (path.startsWith("/admin") || path.startsWith("/furnizor/panou")) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const isAdmin = profile?.role === "admin";
+    const allowed = path.startsWith("/admin")
+      ? isAdmin
+      : isAdmin || profile?.role === "provider";
+
+    if (!allowed) {
+      return NextResponse.redirect(new URL("/cont?access=denied", request.url));
+    }
+  }
+
   return response;
 }
 
