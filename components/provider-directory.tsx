@@ -31,8 +31,6 @@ const publicProviders: PublicProvider[] = [
     category: "Afterschool bilingv · educație · sport",
     description: "Program afterschool română–germană, ateliere creative, robotică și activități sportive.",
     url: "https://imalokinderklub.ro/",
-    image: "https://www.timisoreni.ro/upload/photo/2013-06/imalo_kinderklub_timisoara_large.JPG",
-    imageAlt: "Banner public de prezentare IMALO Kinderklub",
     locality: "Timișoara",
     sourceLabel: "Site oficial",
   },
