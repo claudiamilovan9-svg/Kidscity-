@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { MapPin, ArrowRight, LoaderCircle, Store, ExternalLink } from "lucide-react";
+import { MapPin, ArrowRight, LoaderCircle, Store, ExternalLink, Search } from "lucide-react";
 
 type Provider = {
   id: string;
