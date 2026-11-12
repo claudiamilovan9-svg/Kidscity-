@@ -19,7 +19,7 @@ type Activity = {
   provider_name: string;
   provider_website: string | null;
   contact_phone: string | null;
-  source_url: string;
+  source_url: string | null;
   schedule_text: string | null;
   duration_minutes: number | null;
   listing_status: "needs_confirmation" | "seasonal" | "closed";
@@ -70,14 +70,61 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
     async function load() {
       try {
         const supabase = createClient();
-        const { data, error: queryError } = await supabase
-          .from("activity_catalog_entries")
-          .select("id,activity_title,slug,description,min_age_months,max_age_months,price_min_amount,price_max_amount,price_label,price_unit,provider_name,provider_website,contact_phone,source_url,schedule_text,duration_minutes,listing_status,status_note,category:categories(name,slug),location:localities(name)")
-          .eq("is_visible", true)
-          .neq("listing_status", "closed")
-          .order("last_checked_at", { ascending: false });
-        if (queryError) throw queryError;
-        if (active) setActivities((data ?? []).map((row: any) => ({ ...row, title: row.activity_title })) as Activity[]);
+        const [catalogResult, providerResult] = await Promise.all([
+          supabase
+            .from("activity_catalog_entries")
+            .select("id,activity_title,slug,description,min_age_months,max_age_months,price_min_amount,price_max_amount,price_label,price_unit,provider_name,provider_website,contact_phone,source_url,schedule_text,duration_minutes,listing_status,status_note,category:categories(name,slug),location:localities(name)")
+            .eq("is_visible", true)
+            .neq("listing_status", "closed")
+            .order("last_checked_at", { ascending: false }),
+          supabase
+            .from("activities")
+            .select("id,title,slug,description,min_age_months,max_age_months,price_amount,price_unit,price_label,duration_minutes,schedule_days,start_time,end_time,category:categories(name,slug),provider:provider_profiles!inner(business_name,website_url,status),location:provider_locations!inner(address,contact_phone,localities(name))")
+            .eq("is_active", true)
+            .eq("provider.status", "approved")
+        ]);
+        if (catalogResult.error) throw catalogResult.error;
+        if (providerResult.error) throw providerResult.error;
+
+        const catalogActivities = (catalogResult.data ?? []).map((row: any) => ({
+          ...row,
+          title: row.activity_title,
+        })) as Activity[];
+        const providerActivities = (providerResult.data ?? []).map((row: any) => {
+          const locality = Array.isArray(row.location?.localities) ? row.location.localities[0] : row.location?.localities;
+          const provider = Array.isArray(row.provider) ? row.provider[0] : row.provider;
+          const location = Array.isArray(row.location) ? row.location[0] : row.location;
+          const schedule = [
+            ...(row.schedule_days ?? []),
+            row.start_time && row.end_time ? `${String(row.start_time).slice(0, 5)}–${String(row.end_time).slice(0, 5)}` : ""
+          ].filter(Boolean).join(" · ");
+          const price = row.price_amount !== null && row.price_amount !== undefined
+            ? `${row.price_amount} lei${row.price_label ? ` · ${row.price_label}` : ""}`
+            : (row.price_label || "Detalii la organizator");
+          return {
+            id: row.id,
+            title: row.title,
+            slug: row.slug,
+            description: row.description ?? "",
+            min_age_months: row.min_age_months ?? 0,
+            max_age_months: row.max_age_months ?? 216,
+            price_min_amount: row.price_amount ?? null,
+            price_max_amount: row.price_amount ?? null,
+            price_label: price,
+            price_unit: row.price_unit ?? "",
+            provider_name: provider?.business_name ?? "Furnizor KidsCity",
+            provider_website: provider?.website_url ?? null,
+            contact_phone: location?.contact_phone ?? null,
+            source_url: null,
+            schedule_text: schedule || null,
+            duration_minutes: row.duration_minutes ?? null,
+            listing_status: "needs_confirmation" as const,
+            status_note: "Informații introduse de furnizor. Confirmă direct programul, tariful și disponibilitatea.",
+            category: row.category,
+            location: { name: locality?.name ?? location?.address ?? "Locație de confirmat" },
+          } as Activity;
+        });
+        if (active) setActivities([...providerActivities, ...catalogActivities]);
       } catch {
         if (active) setError("Nu am putut încărca activitățile. Te rugăm să încerci din nou.");
       } finally {
@@ -127,7 +174,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         <p className="activity-catalog-note">{activity.status_note}</p>
         <div className="activity-card-links">
           {activity.provider_website && <a href={activity.provider_website} target="_blank" rel="noopener noreferrer">Site organizator</a>}
-          <a href={activity.source_url} target="_blank" rel="noopener noreferrer">Sursa informațiilor</a>
+          {activity.source_url && <a href={activity.source_url} target="_blank" rel="noopener noreferrer">Sursa informațiilor</a>}
           {activity.contact_phone && <a href={`tel:${activity.contact_phone.replace(/[^+0-9]/g, "")}`}>Sună: {activity.contact_phone}</a>}
         </div>
       </div>
