@@ -76,7 +76,27 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
     return matchesSearch && (!locality || a.location?.locality?.name === locality) && (!category || a.category?.slug === category) && matchesAge && matchesPrice;
   }), [activities, search, locality, category, age, maxPrice]);
 
-  const visible = compact ? filtered.slice(0, 6) : filtered;
+  const grouped = useMemo(() => {
+    const groups = new Map<string, Activity[]>();
+    filtered.forEach(activity => {
+      const name = activity.category?.name ?? "Alte activități";
+      groups.set(name, [...(groups.get(name) ?? []), activity]);
+    });
+    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b, "ro"));
+  }, [filtered]);
+
+  const renderActivityCard = (activity: Activity) => (
+    <article className="activity-card" key={activity.id}>
+      <div className="activity-card-art"><span>{activity.category?.name ?? "Activitate pentru copii"}</span><b>{activity.provider?.business_name?.slice(0, 1).toLocaleUpperCase("ro") ?? "K"}</b></div>
+      <div className="activity-card-body">
+        <span className="activity-provider">{activity.provider?.business_name}</span>
+        <h3>{activity.title}</h3>
+        <p>{activity.description}</p>
+        <div className="activity-meta"><span><MapPin size={14}/>{activity.location?.locality?.name ?? "Locație de confirmat"}</span><span>{activity.min_age_months === 0 ? "De la 0 ani" : `De la ${Math.floor(activity.min_age_months / 12)} ani`} · până la {Math.floor(activity.max_age_months / 12)} ani</span></div>
+        <div className="activity-card-bottom"><strong>{activity.price_amount === null ? "Preț la cerere" : `${activity.price_amount} ${activity.currency}`}</strong><span>Ofertă publicată</span></div>
+      </div>
+    </article>
+  );
   const reset = () => { setSearch(""); setLocality(""); setCategory(""); setAge(""); setMaxPrice(""); };
 
   return (
@@ -102,7 +122,15 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
       <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Doar oferte publicate de furnizori aprobați</span></div>
       {loading ? <div className="directory-state"><LoaderCircle className="spin" size={25}/> Încărcăm opțiunile pentru familia ta...</div> :
         error ? <div className="directory-state directory-error">{error}</div> :
-        visible.length === 0 ? <div className="directory-state"><strong>Momentan nu am găsit activități pentru aceste filtre.</strong><span>Încearcă o altă categorie sau resetează filtrele.</span><button className="filter-reset" onClick={reset}>Resetează filtrele</button></div> :
+        filtered.length === 0 ? <div className="directory-state"><strong>Momentan nu am găsit activități pentru aceste filtre.</strong><span>Încearcă o altă categorie sau resetează filtrele.</span><button className="filter-reset" onClick={reset}>Resetează filtrele</button></div> :
+        compact ? <div className="directory-category-list">{grouped.map(([name, items]) => (
+          <section className="directory-category" key={name}>
+            <div className="directory-category-heading"><h3>{name}</h3><span>{items.length} {items.length === 1 ? "activitate" : "activități"}</span></div>
+            <div className="activity-grid">{items.map(renderActivityCard)}</div>
+          </section>
+        ))}</div> : <div className="activity-grid">{filtered.map(renderActivityCard)}</div>
+      }
+ :
         <div className="activity-grid">{visible.map(activity => (
           <article className="activity-card" key={activity.id}>
             <div className="activity-card-art"><span>{activity.category?.name ?? "Activitate pentru copii"}</span><b>{activity.provider?.business_name?.slice(0, 1).toLocaleUpperCase("ro") ?? "K"}</b></div>
