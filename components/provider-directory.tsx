@@ -298,7 +298,7 @@ export default function ProviderDirectory() {
   });
 
   return (
-    <section className="provider-directory" id="furnizori">
+    <section className="provider-directory" id="catalog-furnizori">
       <div className="provider-directory-heading">
         <span className="eyebrow"><Store size={14}/> COMUNITATEA KIDSCITY</span>
         <h2>Furnizori pentru <span>copilul tău</span></h2>
@@ -337,7 +337,6 @@ export default function ProviderDirectory() {
         <button className="filter-reset" onClick={() => { setDirectorySearch(""); setDirectoryCategory(""); setDirectoryLocality(""); }}>Resetează filtrele</button>
       </div>
       <p className="provider-directory-note">{filteredPublicProviders.length} furnizori găsiți. Linkurile duc către site-uri sau directoare publice; listarea nu înseamnă parteneriat confirmat.</p>
-      <p className="provider-directory-note">Acestea sunt linkuri externe către paginile publice ale organizațiilor. KidsCity nu confirmă disponibilitatea locurilor sau actualitatea tarifelor; verifică direct cu furnizorul.</p>
       <div className="provider-grid">
         {filteredPublicProviders.map(provider => (
           <article className="provider-card provider-card-featured" key={provider.name}>
