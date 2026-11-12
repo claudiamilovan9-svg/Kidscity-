@@ -31,11 +31,11 @@ export default function Home() {
           <form className="search-panel" action="/activitati" method="get">
             <label>
               <Search size={18}/>
-              <span><small htmlFor="home-search">Ce căutăm?</small><input id="home-search" name="q" type="search" placeholder="Sport, artă, dans..." /></span>
+              <span><small>Ce căutăm?</small><input id="home-search" name="q" type="search" placeholder="Sport, artă, dans..." /></span>
             </label>
             <label>
               <MapPin size={18}/>
-              <span><small htmlFor="home-locality">Unde?</small>
+              <span><small>Unde?</small>
                 <select id="home-locality" name="locality" defaultValue="">
                   <option value="">Toate localitățile</option>
                   <option value="Timișoara">Timișoara</option>
