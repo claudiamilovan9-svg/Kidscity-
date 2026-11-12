@@ -41,7 +41,7 @@ create table public.children (
   birth_date date not null,
   notes text,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 create table public.provider_profiles (
