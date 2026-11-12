@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
+import { ArrowRight, MapPin, Heart, ShieldCheck, Sparkles, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
+import ActivityDirectory from "@/components/activity-directory";
 
 const categories = [
   { name: "Creșe & grădinițe", detail: "Locuri în care cei mici cresc frumos", icon: Baby, tone: "peach" },
@@ -44,8 +45,10 @@ export default function Home() {
 
       <section className="trust-strip"><div><strong>Un singur loc</strong><span>pentru idei și activități</span></div><div><strong>Pe vârsta copilului</strong><span>recomandări mai potrivite</span></div><div><strong>Aproape de tine</strong><span>în Timișoara și localitățile vecine</span></div></section>
 
+      <ActivityDirectory compact />
+
       <section className="section" id="categorii">
-        <div className="section-heading"><div><span className="eyebrow">DESCOPERĂ CE I SE POTRIVEȘTE</span><h2>O lume întreagă de <span>activități</span></h2></div><Link className="text-link" href="/activitati">Vezi toate activitățile <ArrowRight size={16}/></Link></div>
+        <div className="section-heading"><div><span className="eyebrow">DESCOPERĂ CE I SE POTRIVEȘTE</span><h2>Explorează după <span>categorie</span></h2></div><Link className="text-link" href="/activitati">Toate categoriile <ArrowRight size={16}/></Link></div>
         <div className="category-grid">{categories.map(({name,detail,icon:Icon,tone}) => <Link className="category-card" href="/activitati" key={name}><span className={"category-icon "+tone}><Icon size={25}/></span><strong>{name}</strong><small>{detail}</small><ArrowRight className="category-arrow" size={18}/></Link>)}</div>
       </section>
 
