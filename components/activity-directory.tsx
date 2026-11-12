@@ -77,7 +77,9 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
   const categories = useMemo(() => {
     const values = new Map<string, string>();
     activities.forEach(a => { if (a.category?.slug && a.category.name) values.set(a.category.slug, a.category.name); });
-    return [...new Map([...fallbackCategories, ...values].map(item => [item.slug, item])).values()].sort((a, b) => a.name.localeCompare(b.name, "ro"));
+    const merged = new Map(fallbackCategories.map(item => [item.slug, item]));
+    values.forEach((name, slug) => merged.set(slug, { slug, name }));
+    return [...merged.values()].sort((a, b) => a.name.localeCompare(b.name, "ro"));
   }, [activities]);
 
   const filtered = useMemo(() => activities.filter(a => {
