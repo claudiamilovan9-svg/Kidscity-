@@ -5,6 +5,10 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
+function safeNextPath(value: string | null) {
+  return value && value.startsWith("/") && !value.startsWith("//") ? value : "/cont";
+}
+
 export default function SignInPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -20,7 +24,8 @@ export default function SignInPage() {
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      router.push("/cont");
+      const next = safeNextPath(new URLSearchParams(window.location.search).get("next"));
+      router.replace(next);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Autentificarea nu a reușit.");
