@@ -31,6 +31,12 @@ export default function Home() {
         <nav className="desktop-nav"><a href="#categorii">Categorii</a><Link href="/furnizori">Furnizori</Link><a href="#cum-functioneaza">Cum funcționează</a><a href="#furnizori">Pentru furnizori</a></nav>
         <div className="header-actions"><Link className="login-link" href="/autentificare">Intră în cont</Link><Link className="button button-small" href="/inscriere">Creează cont</Link></div>
       </header>
+      <nav className="mobile-nav" aria-label="Navigare rapidă">
+        <Link href="#categorii">Categorii</Link>
+        <Link href="/activitati">Activități</Link>
+        <Link href="/furnizori">Furnizori</Link>
+        <Link href="#furnizori">Pentru organizatori</Link>
+      </nav>
 
       <section className="hero">
         <div className="hero-copy">
