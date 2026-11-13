@@ -327,6 +327,112 @@ const publicProviders: PublicProvider[] = [
     locality: "Timișoara",
     sourceLabel: "Director public · listare neconfirmată",
   },
+
+  {
+    name: "Clubul Micilor Mușchetari",
+    category: "Afterschool · before school · engleză · ateliere",
+    description: "Programe before și after school în Giroc, cu sprijin la teme, engleză și activități de dezvoltare.",
+    url: "https://miciimuschetari.ro/",
+    locality: "Giroc",
+    address: "Strada Diversității 31",
+    sourceLabel: "Site oficial",
+  },
+  {
+    name: "Alfabetul Copiilor",
+    category: "Educație timpurie · engleză · ateliere",
+    description: "Program educațional pentru preșcolari, cu activități de dezvoltare, engleză, muzică și mișcare.",
+    url: "https://alfabetulcopiilor.ro/program-micii-cercetasi/",
+    locality: "Timișoara",
+    sourceLabel: "Pagină de prezentare",
+  },
+  {
+    name: "Alimeria Ceramics",
+    category: "Artă · ceramică · ateliere creative",
+    description: "Ateliere de pictură pe ceramică și modelaj, inclusiv experiențe părinte–copil.",
+    url: "https://www.google.com/maps/search/?api=1&query=Alimeria+Ceramics+Ghiroda",
+    locality: "Ghiroda",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+  {
+    name: "One Move",
+    category: "Sport · escaladă",
+    description: "Sesiuni de escaladă pentru copii, în grupe mici și cu instructor.",
+    url: "https://www.google.com/maps/search/?api=1&query=One+Move+Timisoara",
+    locality: "Timișoara",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+  {
+    name: "Language Club",
+    category: "Limbi străine · germană",
+    description: "Cursuri de germană pentru copii și adolescenți, organizate pe grupe.",
+    url: "https://www.google.com/maps/search/?api=1&query=Language+Club+Timisoara",
+    locality: "Timișoara",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+  {
+    name: "KinderVille Dumbrăvița",
+    category: "Educație · afterschool · dezvoltare personală",
+    description: "Centru educațional cu programe pentru copii și sprijin academic.",
+    url: "https://www.google.com/maps/search/?api=1&query=Kinderville+Dumbravita",
+    locality: "Dumbrăvița",
+    address: "Strada Mureș 27",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+  {
+    name: "Cameleon Kids",
+    category: "Afterschool · artă · evenimente",
+    description: "Spațiu cultural și educațional pentru copii, cu activități și evenimente.",
+    url: "https://www.google.com/maps/search/?api=1&query=Cameleon+Kids+Mosnita+Noua",
+    locality: "Moșnița Nouă",
+    address: "Strada Scatiului",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+  {
+    name: "Camelot Playground",
+    category: "Joacă · petreceri · evenimente",
+    description: "Spațiu de joacă și evenimente private pentru aniversări și grupuri de copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=Camelot+Playground+Timisoara",
+    locality: "Timișoara",
+    address: "Calea Urseni 57",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+  {
+    name: "Joben Kids Party",
+    category: "Joacă · petreceri pentru copii",
+    description: "Spațiu de joacă și petreceri aniversare pentru copii.",
+    url: "https://jobenkidsparty.ro/",
+    locality: "Timișoara",
+    address: "Strada Mareșal Constantin Prezan 108",
+    sourceLabel: "Site oficial",
+  },
+  {
+    name: "Noso",
+    category: "Joacă indoor · petreceri · familie",
+    description: "Loc de joacă interior pentru copii și spațiu pentru petreceri.",
+    url: "https://www.google.com/maps/search/?api=1&query=Noso+Timisoara",
+    locality: "Timișoara",
+    address: "Strada Johann Heinrich Pestalozzi 20",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+  {
+    name: "Mini Kids Plaza",
+    category: "Joacă indoor · ateliere · petreceri",
+    description: "Spațiu de joacă interior cu posibilități de organizare a atelierelor și petrecerilor tematice.",
+    url: "https://www.google.com/maps/search/?api=1&query=Mini+Kids+Plaza+Timisoara",
+    locality: "Timișoara",
+    address: "Strada Mureș 132",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+  {
+    name: "Daf Kids",
+    category: "Joacă · petreceri tematice · ateliere",
+    description: "Loc de joacă și spațiu pentru aniversări și evenimente tematice pentru copii.",
+    url: "https://www.google.com/maps/search/?api=1&query=Daf+Kids+Giroc",
+    locality: "Giroc",
+    address: "Strada Gloria",
+    sourceLabel: "Profil local public · verificare directă necesară",
+  },
+
 ];
 
 export default function ProviderDirectory() {
@@ -449,6 +555,7 @@ export default function ProviderDirectory() {
               </div>
             )}
             <div className="provider-card-content">
+              <span className="provider-status">Listare informativă · verifică detaliile direct la furnizor</span>
               <span className="provider-card-category">{provider.category}</span>
               <h3>{provider.name}</h3>
               <p>{provider.description}</p>
