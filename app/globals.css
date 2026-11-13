@@ -93,3 +93,5 @@
 /* Keep long provider and activity descriptions tidy in directory cards. */
 .provider-card-content > p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 .activity-card-body > p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+
+.provider-status{display:inline-flex;align-self:flex-start;max-width:100%;padding:6px 9px;border:1px solid #f1dfb5;border-radius:999px;background:#fff8e9;color:#85652b;font-size:10px;font-weight:800;line-height:1.35}.provider-card-content{min-width:0}.provider-card-content p{overflow-wrap:anywhere}.provider-card-featured .provider-status{margin-bottom:8px}
