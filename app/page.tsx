@@ -64,12 +64,8 @@ export default function Home() {
           </form>
           <div className="hero-note"><ShieldCheck size={16}/> Furnizori locali · activități pentru fiecare vârstă</div>
         </div>
-        <div className="hero-art" aria-label="Ilustrație decorativă cu forme colorate">
-          <div className="sun"></div><div className="orbit orbit-one"></div><div className="orbit orbit-two"></div>
-          <div className="hero-card card-top"><span>✦</span><b>Joacă.</b><small>Descoperire.</small></div>
-          <div className="hero-card card-bottom"><Heart size={18} fill="currentColor"/><b>Amintiri</b><small>care cresc odată cu ei</small></div>
-          <div className="hero-sticker">YAY!</div>
-          <div className="hero-blob"><Compass size={142} strokeWidth={1.35} /><Sparkles className="compass-sparkle" size={27} /></div>
+        <div className="hero-art">
+          <img className="hero-compass-image" src="/images/kidscity-compass.jpg" alt="Busolă holografică în nuanțe pastelate" />
         </div>
       </section>
 
