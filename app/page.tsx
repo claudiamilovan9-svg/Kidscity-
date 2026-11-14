@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
+import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Compass, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
 import ActivityDirectory from "@/components/activity-directory";
 
 const categories = [
@@ -69,7 +69,7 @@ export default function Home() {
           <div className="hero-card card-top"><span>✦</span><b>Joacă.</b><small>Descoperire.</small></div>
           <div className="hero-card card-bottom"><Heart size={18} fill="currentColor"/><b>Amintiri</b><small>care cresc odată cu ei</small></div>
           <div className="hero-sticker">YAY!</div>
-          <div className="hero-blob"><span>☺</span></div>
+          <div className="hero-blob"><Compass size={142} strokeWidth={1.35} /><Sparkles className="compass-sparkle" size={27} /></div>
         </div>
       </section>
 
