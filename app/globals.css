@@ -96,3 +96,9 @@
 
 .provider-status{display:inline-flex;align-self:flex-start;max-width:100%;padding:6px 9px;border:1px solid #f1dfb5;border-radius:999px;background:#fff8e9;color:#85652b;font-size:10px;font-weight:800;line-height:1.35}.provider-card-content{min-width:0}.provider-card-content p{overflow-wrap:anywhere}.provider-card-featured .provider-status{margin-bottom:8px}
 
+
+
+/* Uploaded original compass artwork in homepage hero */
+.hero-art{display:flex;align-items:center;justify-content:center;min-height:350px}
+.hero-compass-image{display:block;width:min(100%,430px);height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:4px;box-shadow:0 18px 38px rgba(45,35,65,.12)}
+@media(max-width:800px){.hero-compass-image{width:min(88%,360px)}}
