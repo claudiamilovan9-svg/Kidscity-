@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 import { MapPin, Search, SlidersHorizontal, ArrowRight, LoaderCircle, Sparkles } from "lucide-react";
 
 type Activity = {
@@ -69,17 +69,18 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
     let active = true;
     async function load() {
       try {
-        const supabase = createClient();
+        const supabase = createClient("https://nwjbqulxdzjsswrbkbsh.supabase.co", "sb_publishable_evfql3aND0_BiIfzP5R6Nw_hOa0jy_r", { auth: { persistSession: false, autoRefreshToken: false } });
         const { data, error: queryError } = await supabase
           .from("activity_catalog_entries")
           .select("id,activity_title,slug,description,min_age_months,max_age_months,price_min_amount,price_max_amount,price_label,price_unit,provider_name,provider_website,contact_phone,source_url,schedule_text,duration_minutes,listing_status,status_note,category:categories(name,slug),location:localities(name)")
           .eq("is_visible", true)
           .neq("listing_status", "closed")
           .order("last_checked_at", { ascending: false });
-        if (queryError) throw queryError;
+        if (queryError) { console.error("KidsCity activity catalog query failed:", queryError); throw queryError; }
         if (active) setActivities((data ?? []).map((row: any) => ({ ...row, title: row.activity_title })) as Activity[]);
-      } catch {
-        if (active) setError("Nu am putut încărca activitățile. Te rugăm să încerci din nou.");
+      } catch (caught) {
+        console.error("KidsCity activity catalog load failed:", caught);
+        if (active) setError("Nu am putut încărca activitățile. Verifică conexiunea și reîncarcă pagina.");
       } finally {
         if (active) setLoading(false);
       }
