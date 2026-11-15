@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Search, MapPin, ShieldCheck, Sparkles, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
+import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Compass, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
 import ActivityDirectory from "@/components/activity-directory";
 
 const categories = [
@@ -64,17 +64,12 @@ export default function Home() {
           </form>
           <div className="hero-note"><ShieldCheck size={16}/> Furnizori locali · activități pentru fiecare vârstă</div>
         </div>
-        <div className="hero-art">
-          <div role="img" aria-label="Busolă pastelată KidsCity" style={{ width: "min(100%, 390px)", aspectRatio: "1", margin: "0 auto", borderRadius: "50%", padding: 22, background: "linear-gradient(135deg, #f5d9e9, #e2dbfa 48%, #d7f3e8)", boxShadow: "0 20px 60px rgba(114,87,216,.15)", display: "grid", placeItems: "center" }}>
-            <div style={{ width: "100%", height: "100%", borderRadius: "50%", border: "12px solid #e6cfa9", background: "#fffdf8", boxShadow: "inset 0 0 0 3px #f1e8da, 0 12px 28px rgba(80,70,100,.12)", position: "relative", display: "grid", placeItems: "center" }}>
-              <span style={{ position: "absolute", top: 14, left: "50%", transform: "translateX(-50%)", fontWeight: 900, color: "#947bc7", fontSize: 22 }}>N</span>
-              <span style={{ position: "absolute", bottom: 14, left: "50%", transform: "translateX(-50%)", fontWeight: 900, color: "#947bc7", fontSize: 22 }}>S</span>
-              <span style={{ position: "absolute", left: 18, top: "50%", transform: "translateY(-50%)", fontWeight: 900, color: "#947bc7", fontSize: 22 }}>V</span>
-              <span style={{ position: "absolute", right: 18, top: "50%", transform: "translateY(-50%)", fontWeight: 900, color: "#947bc7", fontSize: 22 }}>E</span>
-              <div style={{ width: "54%", height: "54%", background: "linear-gradient(160deg, #e6b7d5 0%, #b5a3e4 50%, #a9d9ca 51%, #d8f0e4 100%)", clipPath: "polygon(50% 0%, 66% 50%, 50% 100%, 34% 50%)", filter: "drop-shadow(0 5px 4px rgba(90,70,120,.2))" }} />
-              <div style={{ position: "absolute", width: 22, height: 22, borderRadius: "50%", background: "#c5a978", border: "4px solid #fff7df" }} />
-            </div>
-          </div>
+        <div className="hero-art" aria-label="Ilustrație decorativă cu forme colorate">
+          <div className="sun"></div><div className="orbit orbit-one"></div><div className="orbit orbit-two"></div>
+          <div className="hero-card card-top"><span>✦</span><b>Joacă.</b><small>Descoperire.</small></div>
+          <div className="hero-card card-bottom"><Heart size={18} fill="currentColor"/><b>Amintiri</b><small>care cresc odată cu ei</small></div>
+          <div className="hero-sticker">YAY!</div>
+          <div className="hero-blob"><Compass size={142} strokeWidth={1.35} /><Sparkles className="compass-sparkle" size={27} /></div>
         </div>
       </section>
 
