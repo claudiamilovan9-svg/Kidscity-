@@ -65,7 +65,7 @@ export default function Home() {
           <div className="hero-note"><ShieldCheck size={16}/> Furnizori locali · activități pentru fiecare vârstă</div>
         </div>
         <div className="hero-art">
-          <img className="hero-compass-image" src="/images/kidscity-compass.svg" alt="Busolă holografică în nuanțe pastelate" />
+          <img className="hero-compass-image" src="/images/kidscity-compass.svg" alt="Busolă elegantă în nuanțe pastelate" width={720} height={620} style={{ display: "block", width: "100%", maxWidth: 520, height: "auto", margin: "0 auto", objectFit: "contain" }} />
         </div>
       </section>
 
