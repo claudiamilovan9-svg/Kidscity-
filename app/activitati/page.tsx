@@ -12,9 +12,10 @@ export default function ActivitiesPage() {
       <div className="listing-intro">
         <Link className="back-home" href="/"><ArrowLeft size={14}/> Pagina principală</Link>
         <span className="eyebrow">DESCOPERĂ ȘI ALEGE</span>
-        <h1>Activități pentru <span>copilul tău</span></h1>
-        <p>Explorează activități identificate în surse publice. Confirmă direct cu organizatorul programul, tariful și locurile disponibile înainte de înscriere.</p>
+        <h1>Cursuri și <span>activități regulate</span></h1>
+        <p>Descoperă cursuri și activități la care copiii se pot înscrie pentru mai multe ședințe sau pe perioade mai lungi. Confirmă programul, tariful și disponibilitatea direct cu organizatorul.</p>
       </div>
+      <p style={{textAlign:"center",margin:"12px auto"}}>Cauți un spectacol sau un atelier de o zi? <Link href="/evenimente" style={{color:"#7456d8",fontWeight:700}}>Vezi evenimentele din oraș →</Link></p>
       <ActivityDirectory />
     </main>
   );
