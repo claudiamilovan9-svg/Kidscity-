@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Compass, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
 import ActivityDirectory from "@/components/activity-directory";
+import EventsCalendar from "@/components/events-calendar";
 
 const categories = [
   { name: "Creșe & grădinițe", detail: "Locuri în care cei mici cresc frumos", icon: Baby, tone: "peach" },
@@ -27,12 +28,13 @@ export default function Home() {
     <main>
       <header className="site-header">
         <Link className="brand" href="/"><span className="brand-mark">K</span><span>kids<span className="brand-city">city</span><small>CREȘTEM ÎMPREUNĂ</small></span></Link>
-        <nav className="desktop-nav"><a href="#categorii">Categorii</a><Link href="/furnizori">Furnizori</Link><a href="#cum-functioneaza">Cum funcționează</a><a href="#furnizori">Pentru furnizori</a></nav>
+        <nav className="desktop-nav"><a href="#categorii">Categorii</a><Link href="/evenimente">Evenimente</Link><Link href="/furnizori">Furnizori</Link><a href="#cum-functioneaza">Cum funcționează</a><a href="#furnizori">Pentru furnizori</a></nav>
         <div className="header-actions"><Link className="login-link" href="/autentificare">Intră în cont</Link><Link className="button button-small" href="/inscriere">Creează cont</Link></div>
       </header>
       <nav className="mobile-nav" aria-label="Navigare rapidă">
         <Link href="#categorii">Categorii</Link>
         <Link href="/activitati">Activități</Link>
+        <Link href="/evenimente">Evenimente</Link>
         <Link href="/furnizori">Furnizori</Link>
         <Link href="#furnizori">Pentru organizatori</Link>
       </nav>
@@ -76,6 +78,7 @@ export default function Home() {
       <section className="trust-strip"><div><strong>Un singur loc</strong><span>pentru idei și activități</span></div><div><strong>Pe vârsta copilului</strong><span>recomandări mai potrivite</span></div><div><strong>Aproape de tine</strong><span>în Timișoara și localitățile vecine</span></div></section>
 
 
+      <EventsCalendar compact />
       <ActivityDirectory compact />
 
       <section className="section" id="categorii">
