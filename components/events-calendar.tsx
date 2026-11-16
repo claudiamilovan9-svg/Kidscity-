@@ -67,7 +67,7 @@ export default function EventsCalendar({ compact = false }: { compact?: boolean 
   return (
     <section id="calendar-evenimente" className={compact ? "section" : "directory-section directory-full"} style={{ maxWidth: 1120, margin: "32px auto", padding: "24px 18px" }}>
       <div className="section-heading">
-        <div><span className="eyebrow">KIDSCITY · ÎN ORAȘUL TĂU</span><h2>Calendarul <span>aventurilor</span></h2><p>Evenimente pentru copii din Timișoara, Dumbrăvița și împrejurimi, cu surse publice verificate.</p></div>
+        <div><span className="eyebrow">KIDSCITY · ÎN ORAȘUL TĂU</span><h2>{compact ? <>Ce facem cu copiii <span>în acest weekend?</span></> : <>Evenimente <span>în oraș</span></>}</h2><p>{compact ? "Evenimente în oraș · Timișoara, Dumbrăvița și împrejurimi. Alege o zi și descoperă ce se întâmplă." : "Calendarul evenimentelor pentru copii din Timișoara, Dumbrăvița și împrejurimi, cu surse publice verificate."}</p></div>
         {compact && <Link className="text-link" href="/evenimente">Calendar complet <ArrowRight size={16}/></Link>}
       </div>
       <div style={{ display: "flex", gap: 9, flexWrap: "wrap", margin: "18px 0" }}>
