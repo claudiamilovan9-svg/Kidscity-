@@ -111,6 +111,8 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
               <strong style={{ color: "#7456d8" }}>{new Intl.DateTimeFormat("ro-RO", { timeZone: zone, day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }).format(new Date(event.starts_at))}</strong>
               <h4 style={{ margin: "7px 0" }}>{event.title}</h4>
               <p>{event.organizer} · {event.locality}{event.venue ? ` · ${event.venue}` : ""}</p>
+              {event.description && <p>{event.description}</p>}
+              {(event.age_label || event.price_label) && <p>{[event.age_label, event.price_label].filter(Boolean).join(" · ")}</p>}
               <a href={event.source_url} target="_blank" rel="noopener noreferrer" style={{ color: "#7456d8", fontWeight: 700 }}>Sursa organizatorului ↗</a>
             </article>)}
           </div>}
