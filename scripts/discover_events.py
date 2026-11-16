@@ -30,6 +30,9 @@ SOURCES = (
     "https://fundatiajecza.ro/",
     "https://sotroncupovesti.ro/",
     "https://www.iuliustown.ro/ro/evenimente",
+    "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802",
+    "https://www.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?genre=animatie",
+    "https://zilesinopti.ro/filme-copii-timisoara/",
 )
 LOCALITIES = ("timișoara", "timisoara", "dumbrăvița", "dumbravita", "giroc",
               "moșnița", "mosnita", "ghiroda")
