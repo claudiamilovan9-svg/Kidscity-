@@ -64,7 +64,7 @@ export default function EventsCalendar({ compact = false }: { compact?: boolean 
   const saturday = new Date(todayDate.getTime() + ((6 - weekday + 7) % 7) * 86400000);
   const selectedEvents = visible.filter(event => dayKey(new Date(event.starts_at)) === selected);
   const eventsByDay = new Set(visible.map(event => dayKey(new Date(event.starts_at))));
-  const upcoming = visible.filter(event => { const date = dayKey(new Date(event.starts_at)); return date >= today && date !== selected; }).slice(0, 12);
+  const upcoming = visible.filter(event => { const date = dayKey(new Date(event.starts_at)); return date > selected && date >= today; }).slice(0, 12);
   return (
     <section id="calendar-evenimente" className={compact ? "section" : "directory-section directory-full"} style={{ maxWidth: 1120, margin: "32px auto", padding: "24px 18px" }}>
       <div className="section-heading">
