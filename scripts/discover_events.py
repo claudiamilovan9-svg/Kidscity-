@@ -33,11 +33,7 @@ SOURCES = (
     "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802",
     "https://www.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?genre=animatie",
     "https://zilesinopti.ro/filme-copii-timisoara/",
-    "https://cinema-timisoara.ro/",
-    "https://cinema-timisoara.ro/cinema-studio/",
-    "https://cinema-timisoara.ro/cinema-timis/",
-    "https://cinema-timisoara.ro/cinema-victoria/",
-    "https://cinema-timisoara.ro/cinema-johnny/",
+    "https://cinema-timisoara.ro/program/",
     "https://www.cinemacity.ro/cinemas/timisoara-shopping-city/1823",
     "https://www.cinemagia.ro/program-cinema/cinema-city-shopping-city-timisoara/",
     "https://www.ceaucinema.ro/",
@@ -92,7 +88,7 @@ def walk(value):
             types = [types]
         if any(str(t).split("/")[-1] in ("Event", "TheaterEvent", "ScreeningEvent", "ChildrensEvent", "EducationEvent", "Festival", "MusicEvent", "ExhibitionEvent") for t in types):
             yield value
-        for key in ("@graph", "itemListElement"):
+        for key in ("@graph", "itemListElement", "mainEntity", "event", "events"):
             if key in value:
                 yield from walk(value[key])
 
@@ -132,12 +128,19 @@ def normalize(event, page, now, end):
     date = parse_date(event.get("startDate"))
     place = place_info(event)
     if not title or not date or not place or not now <= date <= end:
+        reasons = []
+        if not title: reasons.append("missing title")
+        if not date: reasons.append("missing/invalid date")
+        elif not now <= date <= end: reasons.append("outside 90-day window")
+        if not place: reasons.append("missing/outside locality")
+        print("Rejected {}: {}".format(title[:70] or "(untitled)", ", ".join(reasons)))
         return None
     # Cinema screenings must be explicitly family-oriented; do not import adult films.
     if any(x in page.lower() for x in ("cinema", "cinemagia", "ceaucinema")):
         keywords = ("copii", "familie", "family", "animation", "animație", "animatie", "junior", "kids")
         descriptor = (title + " " + plain(event.get("description"))).lower()
         if not any(word in descriptor for word in keywords):
+            print("Rejected cinema {}: no explicit family suitability".format(title[:70]))
             return None
     organizer = event.get("organizer") or {}
     if isinstance(organizer, list):
