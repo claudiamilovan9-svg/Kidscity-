@@ -64,6 +64,7 @@ export default function EventsCalendar({ compact = false }: { compact?: boolean 
   const saturday = new Date(todayDate.getTime() + ((6 - weekday + 7) % 7) * 86400000);
   const selectedEvents = visible.filter(event => dayKey(new Date(event.starts_at)) === selected);
   const eventsByDay = new Set(visible.map(event => dayKey(new Date(event.starts_at))));
+  const upcoming = visible.filter(event => dayKey(new Date(event.starts_at)) >= today).slice(0, 12);
   return (
     <section id="calendar-evenimente" className={compact ? "section" : "directory-section directory-full"} style={{ maxWidth: 1120, margin: "32px auto", padding: "24px 18px" }}>
       <div className="section-heading">
@@ -99,6 +100,18 @@ export default function EventsCalendar({ compact = false }: { compact?: boolean 
               <p>{[event.age_label, event.price_label].filter(Boolean).join(" · ")}</p>
               {event.description && <p>{event.description}</p>}
               <a href={event.source_url} target="_blank" rel="noopener noreferrer" style={{ color: "#7356d5", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 5 }}>Verifică la organizator <ExternalLink size={15}/></a>
+            </article>)}
+          </div>}
+      </div>
+      <div style={{ marginTop: 28 }}>
+        <h3 style={{ marginBottom: 14 }}>Următoarele evenimente confirmate</h3>
+        {loading ? <p>Se încarcă...</p> : error ? <p role="alert">Nu am putut încărca lista: {error}</p> : upcoming.length === 0 ? <p>Nu sunt încă evenimente confirmate pentru perioada următoare.</p> :
+          <div style={{ display: "grid", gap: 12 }}>
+            {upcoming.map(event => <article key={event.id} style={{ border: "1px solid #e9e3ed", background: "#fff", borderRadius: 16, padding: 16 }}>
+              <strong style={{ color: "#7456d8" }}>{new Intl.DateTimeFormat("ro-RO", { timeZone: zone, day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }).format(new Date(event.starts_at))}</strong>
+              <h4 style={{ margin: "7px 0" }}>{event.title}</h4>
+              <p>{event.organizer} · {event.locality}{event.venue ? ` · ${event.venue}` : ""}</p>
+              <a href={event.source_url} target="_blank" rel="noopener noreferrer" style={{ color: "#7456d8", fontWeight: 700 }}>Sursa organizatorului ↗</a>
             </article>)}
           </div>}
       </div>
