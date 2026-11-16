@@ -19,7 +19,7 @@ export default function KidsCinemaPage() {
         </nav>
       </header>
       <p style={{ maxWidth: 1120, margin: "24px auto 0", padding: "0 18px" }}>
-        Descoperă filme potrivite copiilor la cinematografele din Timișoara.
+        Cinema pentru copii – doar filme potrivite copiilor, cu cinematograf, dată, oră și link către program sau bilete.
         Sunt afișate numai proiecțiile cu dată și sursă confirmate.
         {" "}<Link href="/evenimente" style={{ color: "#7456d8", fontWeight: 700 }}>Vezi toate evenimentele →</Link>
       </p>
