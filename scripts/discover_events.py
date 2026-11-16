@@ -33,6 +33,14 @@ SOURCES = (
     "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802",
     "https://www.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?genre=animatie",
     "https://zilesinopti.ro/filme-copii-timisoara/",
+    "https://cinema-timisoara.ro/",
+    "https://cinema-timisoara.ro/cinema-studio/",
+    "https://cinema-timisoara.ro/cinema-timis/",
+    "https://cinema-timisoara.ro/cinema-victoria/",
+    "https://cinema-timisoara.ro/cinema-johnny/",
+    "https://www.cinemacity.ro/cinemas/timisoara-shopping-city/1823",
+    "https://www.cinemagia.ro/program-cinema/cinema-city-shopping-city-timisoara/",
+    "https://www.ceaucinema.ro/",
 )
 LOCALITIES = ("timișoara", "timisoara", "dumbrăvița", "dumbravita", "giroc",
               "moșnița", "mosnita", "ghiroda")
@@ -130,7 +138,7 @@ def normalize(event, page, now, end):
         source = page
     description = plain(event.get("description"))[:800] or None
     return dict(title=title[:250], organizer=organizer[:250], locality=place[0],
-                venue=place[1], category="Evenimente", starts_at=date.isoformat(),
+                venue=place[1], category=("Cinema pentru copii" if any(x in page.lower() for x in ("cinema", "cinemagia", "ceaucinema")) else "Evenimente"), starts_at=date.isoformat(),
                 description=description, source_url=source,
                 verification_status="pending")
 
