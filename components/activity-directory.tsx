@@ -80,7 +80,11 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         if (active) setActivities((data ?? []).map((row: any) => ({ ...row, title: row.activity_title })) as Activity[]);
       } catch (caught) {
         console.error("KidsCity activity catalog load failed:", caught);
-        if (active) setError("Nu am putut încărca activitățile. Verifică conexiunea și reîncarcă pagina.");
+        if (active) {
+          const issue = caught && typeof caught === "object" ? caught as { code?: string; message?: string; details?: string } : null;
+          const diagnostic = [issue?.code, issue?.message || (caught instanceof Error ? caught.message : "Eroare de rețea sau browser")].filter(Boolean).join(" — ");
+          setError(`Nu am putut încărca activitățile. Detalii: ${diagnostic}`);
+        }
       } finally {
         if (active) setLoading(false);
       }
@@ -156,7 +160,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         <button className="filter-reset" onClick={reset}><SlidersHorizontal size={15}/> Resetează</button>
       </div>
 
-      <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Activități din surse publice · confirmare directă necesară</span></div>
+      <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : error ? "Activitățile nu au putut fi verificate" : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Activități din surse publice · confirmare directă necesară</span></div>
       {loading ? <div className="directory-state"><LoaderCircle className="spin" size={25}/> Încărcăm opțiunile pentru familia ta...</div> :
         error ? <div className="directory-state directory-error">{error}</div> :
         filtered.length === 0 ? <div className="directory-state"><strong>{locality ? `Nu avem încă activități publicate în ${locality}.` : "Momentan nu am găsit activități pentru aceste filtre."}</strong><span>{locality ? "Catalogul pentru această localitate este în curs de completare. Poți încerca Timișoara sau poți reseta filtrele." : "Încearcă o altă categorie sau resetează filtrele."}</span><button className="filter-reset" onClick={reset}>Resetează filtrele</button></div> :
