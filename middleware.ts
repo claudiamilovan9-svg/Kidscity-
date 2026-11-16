@@ -29,7 +29,8 @@ export async function middleware(request: NextRequest) {
   });
 
   // getClaims verifies the JWT; getSession() only reads cookie contents.
-  const { data: { claims }, error } = await supabase.auth.getClaims();
+  const { data, error } = await supabase.auth.getClaims();
+  const claims = data?.claims;
   const userId = !error && typeof claims?.sub === "string" ? claims.sub : null;
   const pathname = request.nextUrl.pathname;
   const isAccountRoute = pathname === "/cont" || pathname.startsWith("/cont/");
