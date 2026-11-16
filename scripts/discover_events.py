@@ -52,14 +52,22 @@ class JSONLDParser(HTMLParser):
         super().__init__()
         self.active = False
         self.blocks = []
+        self.links = []
+        self.parts = []
     def handle_starttag(self, tag, attrs):
+        attributes = dict(attrs)
+        if tag == "a" and attributes.get("href"):
+            self.links.append(attributes["href"])
         if tag == "script":
-            self.active = dict(attrs).get("type", "").lower() == "application/ld+json"
+            self.active = attributes.get("type", "").lower() == "application/ld+json"
+            self.parts = []
     def handle_data(self, data):
         if self.active:
-            self.blocks.append(data)
+            self.parts.append(data)
     def handle_endtag(self, tag):
         if tag == "script":
+            if self.active:
+                self.blocks.append("".join(self.parts))
             self.active = False
 
 def request(url, payload=None, method="GET"):
@@ -71,7 +79,7 @@ def request(url, payload=None, method="GET"):
         key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
         headers.update({"apikey": key, "Authorization": "Bearer " + key})
     req = urllib.request.Request(url, data=data, headers=headers, method=method)
-    with urllib.request.urlopen(req, timeout=20) as response:
+    with urllib.request.urlopen(req, timeout=8) as response:
         return response.read().decode("utf-8", errors="replace")
 
 def walk(value):
@@ -82,7 +90,7 @@ def walk(value):
         types = value.get("@type", [])
         if isinstance(types, str):
             types = [types]
-        if "Event" in types:
+        if any(str(t).split("/")[-1] in ("Event", "TheaterEvent", "ScreeningEvent", "ChildrensEvent", "EducationEvent", "Festival", "MusicEvent", "ExhibitionEvent") for t in types):
             yield value
         for key in ("@graph", "itemListElement"):
             if key in value:
@@ -136,9 +144,7 @@ def normalize(event, page, now, end):
         organizer = organizer[0] if organizer else {}
     if isinstance(organizer, dict):
         organizer = organizer.get("name", "")
-    organizer = plain(organizer)
-    if not organizer:
-        return None
+    organizer = plain(organizer) or urllib.parse.urlparse(page).hostname.removeprefix("www.")
     source = event.get("url") or page
     if not isinstance(source, str) or urllib.parse.urlparse(source).scheme not in ("http", "https"):
         source = page
@@ -159,22 +165,53 @@ def main():
     now = dt.datetime.now(TZ)
     end = now + dt.timedelta(days=days)
     candidates = {}
-    for page in SOURCES:
-        try:
-            parser = JSONLDParser()
-            parser.feed(request(page))
+    stats = {"pages": 0, "errors": 0, "structured": 0, "rejected": 0}
+    for source in SOURCES:
+        queue = [source]
+        visited = set()
+        while queue and len(visited) < 4:
+            page = queue.pop(0)
+            if page in visited:
+                continue
+            visited.add(page)
+            try:
+                parser = JSONLDParser()
+                parser.feed(request(page))
+                stats["pages"] += 1
+            except urllib.error.HTTPError as exc:
+                stats["errors"] += 1
+                print(f"HTTP {exc.code}: {page}")
+                continue
+            except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+                stats["errors"] += 1
+                print(f"Skipped {page}: {type(exc).__name__}")
+                continue
+            for href in parser.links:
+                link = urllib.parse.urljoin(page, href).split("#")[0]
+                parsed = urllib.parse.urlparse(link)
+                if parsed.scheme not in ("http", "https"):
+                    continue
+                if parsed.hostname != urllib.parse.urlparse(source).hostname:
+                    continue
+                if re.search(r"\.(pdf|jpg|png|webp|zip|mp4)$", parsed.path, re.I):
+                    continue
+                if any(word in (parsed.path + "?" + parsed.query).lower() for word in
+                       ("eveniment", "event", "spectacol", "atelier", "program", "film", "cinema", "copii", "calendar")):
+                    if link not in visited and link not in queue and len(queue) < 20:
+                        queue.append(link)
             for block in parser.blocks:
                 try:
                     obj = json.loads(block)
                 except ValueError:
                     continue
                 for item in walk(obj):
+                    stats["structured"] += 1
                     row = normalize(item, page, now, end)
                     if row:
                         signature = (row["title"].casefold(), row["starts_at"], row["locality"].casefold())
                         candidates[signature] = row
-        except (urllib.error.URLError, TimeoutError, ValueError) as exc:
-            print(f"Skipped {page}: {type(exc).__name__}")
+                    else:
+                        stats["rejected"] += 1
     # Fetch existing rows in the same date window, including pending/verified records.
     endpoint = base + "/rest/v1/kidscity_events"
     params = urllib.parse.urlencode({"select": "title,starts_at,locality",
@@ -194,7 +231,8 @@ def main():
             if exc.code == 409:  # unique index prevents duplicate source/date/title
                 continue
             raise
-    print(f"Found {len(candidates)} dated JSON-LD candidates; inserted {added} pending-review events.")
+    print(f"Scanned {stats[\'pages\']} pages; network errors {stats[\'errors\']}; structured {stats[\'structured\']}; rejected {stats[\'rejected\']}.")
+    print(f"Found {len(candidates)} eligible events; inserted {added} pending-review events.")
 
 if __name__ == "__main__":
     main()
