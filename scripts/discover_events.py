@@ -125,6 +125,12 @@ def normalize(event, page, now, end):
     place = place_info(event)
     if not title or not date or not place or not now <= date <= end:
         return None
+    # Cinema screenings must be explicitly family-oriented; do not import adult films.
+    if any(x in page.lower() for x in ("cinema", "cinemagia", "ceaucinema")):
+        keywords = ("copii", "familie", "family", "animation", "animație", "animatie", "junior", "kids")
+        descriptor = (title + " " + plain(event.get("description"))).lower()
+        if not any(word in descriptor for word in keywords):
+            return None
     organizer = event.get("organizer") or {}
     if isinstance(organizer, list):
         organizer = organizer[0] if organizer else {}
