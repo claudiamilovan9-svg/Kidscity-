@@ -79,7 +79,7 @@ def request(url, payload=None, method="GET"):
         key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
         headers.update({"apikey": key, "Authorization": "Bearer " + key})
     req = urllib.request.Request(url, data=data, headers=headers, method=method)
-    with urllib.request.urlopen(req, timeout=20) as response:
+    with urllib.request.urlopen(req, timeout=8) as response:
         return response.read().decode("utf-8", errors="replace")
 
 def walk(value):
@@ -169,7 +169,7 @@ def main():
     for source in SOURCES:
         queue = [source]
         visited = set()
-        while queue and len(visited) < 8:
+        while queue and len(visited) < 4:
             page = queue.pop(0)
             if page in visited:
                 continue
