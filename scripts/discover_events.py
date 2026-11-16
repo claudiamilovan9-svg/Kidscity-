@@ -231,7 +231,7 @@ def main():
             if exc.code == 409:  # unique index prevents duplicate source/date/title
                 continue
             raise
-    print(f"Scanned {stats[\'pages\']} pages; network errors {stats[\'errors\']}; structured {stats[\'structured\']}; rejected {stats[\'rejected\']}.")
+    print("Scanned {} pages; network errors {}; structured {}; rejected {}.".format(stats["pages"], stats["errors"], stats["structured"], stats["rejected"]))
     print(f"Found {len(candidates)} eligible events; inserted {added} pending-review events.")
 
 if __name__ == "__main__":
