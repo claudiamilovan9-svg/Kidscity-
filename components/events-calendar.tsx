@@ -17,7 +17,7 @@ const todayKey = () => dayKey(new Date());
 const monthTitle = (year: number, month: number) => new Intl.DateTimeFormat("ro-RO", { month: "long", year: "numeric" }).format(new Date(Date.UTC(year, month, 1)));
 const mondayOffset = (year: number, month: number) => (new Date(Date.UTC(year, month, 1)).getUTCDay() + 6) % 7;
 
-export default function EventsCalendar({ compact = false }: { compact?: boolean }) {
+export default function EventsCalendar({ compact = false, cinemaOnly = false }: { compact?: boolean; cinemaOnly?: boolean }) {
   const [today] = useState(todayKey);
   const [selected, setSelected] = useState(today);
   const [year, setYear] = useState(Number(today.slice(0, 4)));
@@ -47,7 +47,7 @@ export default function EventsCalendar({ compact = false }: { compact?: boolean 
     load();
     return () => { mounted = false; };
   }, [year, month]);
-  const visible = useMemo(() => events.filter(event => !locality || event.locality === locality), [events, locality]);
+  const visible = useMemo(() => events.filter(event => (!locality || event.locality === locality) && (!cinemaOnly || event.category.toLocaleLowerCase("ro-RO").includes("cinema"))), [events, locality, cinemaOnly]);
   const days = useMemo(() => {
     const count = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
     return [...Array(mondayOffset(year, month)).fill(null), ...Array.from({ length: count }, (_, i) => i + 1)] as (number | null)[];
@@ -68,7 +68,7 @@ export default function EventsCalendar({ compact = false }: { compact?: boolean 
   return (
     <section id="calendar-evenimente" className={compact ? "section" : "directory-section directory-full"} style={{ maxWidth: 1120, margin: "32px auto", padding: "24px 18px" }}>
       <div className="section-heading">
-        <div><span className="eyebrow">KIDSCITY · ÎN ORAȘUL TĂU</span><h2>{compact ? <>Ce facem cu copiii <span>în acest weekend?</span></> : <>Evenimente <span>în oraș</span></>}</h2><p>{compact ? "Evenimente în oraș · Timișoara, Dumbrăvița și împrejurimi. Alege o zi și descoperă ce se întâmplă." : "Calendarul evenimentelor pentru copii din Timișoara, Dumbrăvița și împrejurimi, cu surse publice verificate."}</p></div>
+        <div><span className="eyebrow">KIDSCITY · ÎN ORAȘUL TĂU</span><h2>{compact ? <>Ce facem cu copiii <span>în acest weekend?</span></> : <>{cinemaOnly ? <>Cinema <span>pentru copii</span></> : <>Evenimente <span>în oraș</span></>}</>}</h2><p>{compact ? "Evenimente în oraș · Timișoara, Dumbrăvița și împrejurimi. Alege o zi și descoperă ce se întâmplă." : "{cinemaOnly ? "Proiecții pentru copii în Timișoara și împrejurimi. Afișăm doar programările confirmate." : "Calendarul evenimentelor pentru copii din Timișoara, Dumbrăvița și împrejurimi, cu surse publice verificate."}"}</p></div>
         {compact && <Link className="text-link" href="/evenimente">Calendar complet <ArrowRight size={16}/></Link>}
       </div>
       <div style={{ display: "flex", gap: 9, flexWrap: "wrap", margin: "18px 0" }}>
