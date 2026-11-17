@@ -16,7 +16,7 @@ export default function KidsCinemaPage() {
       <section style={{ maxWidth: 1120, margin: "24px auto 0", padding: "0 18px" }}>
         <span className="eyebrow">TIMIȘOARA · CINEMA PENTRU COPII</span>
         <h1 style={{ font: "900 clamp(30px,5vw,46px)/1.15 Nunito,sans-serif", margin: "14px 0" }}>Filme și ore de proiecție</h1>
-        <p style={{ color: "#69758a", lineHeight: 1.7 }}>Selectează o zi din calendar pentru a vedea filmele și orele disponibile. Am inclus proiecțiile confirmate pentru 17 noiembrie 2026 de la Cinema City Iulius Mall. Pentru alte zile sunt afișate doar proiecțiile existente în baza de date; importul automat zilnic nu este încă activ.</p>
+        <p style={{ color: "#69758a", lineHeight: 1.7 }}>Selectează o zi din calendar pentru a vedea filmele și orele disponibile. Am inclus proiecțiile confirmate pentru 17 noiembrie 2026 de la Cinema City Iulius Mall și Shopping City. Pentru alte zile sunt afișate doar proiecțiile existente în baza de date; importul automat zilnic nu este încă activ.</p>
       </section>
       <EventsCalendar cinemaOnly />
       <footer><Link href="/evenimente">← Înapoi la evenimente</Link></footer>
