@@ -9,6 +9,7 @@ import re
 import sys
 import time
 import urllib.parse
+import urllib.error
 import urllib.request
 from zoneinfo import ZoneInfo
 
@@ -117,6 +118,7 @@ def main():
     scanned = 0
     errors = 0
     existing = set()
+    blocked_sources = set()
     if not dry:
         params = urllib.parse.urlencode({
             "select": "title,venue,starts_at",
@@ -130,6 +132,8 @@ def main():
     for offset in range(days):
         date = today + dt.timedelta(days=offset)
         for venue, slug, tickets in CINEMAS:
+            if slug in blocked_sources:
+                continue
             url = "https://m.cinemagia.ro/program-cinema/" + slug + "/?" + urllib.parse.urlencode({
                 "from_date": date.strftime("%d.%m.%Y")
             })
@@ -165,10 +169,20 @@ def main():
                         existing.add(signature)
                         published += 1
                 print(f"{date} {venue}: {len(films)} family titles")
+            except urllib.error.HTTPError as exc:
+                errors += 1
+                if exc.code in (401, 403, 429):
+                    blocked_sources.add(slug)
+                    print(f"ACCESS BLOCKED {venue}: HTTP {exc.code}. Skipping remaining dates for this source; do not retry or bypass access controls.", file=sys.stderr)
+                else:
+                    print(f"ERROR {date} {venue}: HTTP {exc.code}", file=sys.stderr)
             except Exception as exc:
                 errors += 1
                 print(f"ERROR {date} {venue}: {type(exc).__name__}: {exc}", file=sys.stderr)
             time.sleep(0.4)
+        if len(blocked_sources) == len(CINEMAS):
+            print("All sources blocked; stopping early.", file=sys.stderr)
+            break
     print(f"Days={days}; source pages scanned={scanned}; new screenings={'would publish' if dry else 'published'}={published}; errors={errors}")
     if scanned == 0:
         sys.exit("No verified source pages parsed. Check CineMagia layout/network before publishing.")
