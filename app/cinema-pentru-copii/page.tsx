@@ -1,4 +1,5 @@
 import Link from "next/link";
+import EventsCalendar from "@/components/events-calendar";
 
 export const metadata = {
   title: "Cinema pentru copii în Timișoara | KidsCity",
@@ -39,6 +40,7 @@ export default function KidsCinemaPage() {
         <p style={{ fontSize: 13, marginTop: 24, color: "#69758a" }}>Sursă: <a href={source} target="_blank" rel="noopener noreferrer" style={{ color: "#7257d8", fontWeight: 700 }}>CineMagia – Cinema City Iulius Mall ↗</a>. Orele și disponibilitatea se pot modifica. Confirmă înainte de plecare.</p>
         <p><Link href="/evenimente" style={{ color: "#7257d8" }}>← Înapoi la evenimente</Link></p>
       </section>
+      <EventsCalendar cinemaOnly />
     </main>
   );
 }
