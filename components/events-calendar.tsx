@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { cinemaScreenings } from "@/lib/cinema-screenings";
 import { createClient } from "@supabase/supabase-js";
 import { ArrowLeft, ArrowRight, CalendarDays, MapPin, ExternalLink } from "lucide-react";
 
@@ -47,7 +48,18 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
     load();
     return () => { mounted = false; };
   }, [year, month]);
-  const visible = useMemo(() => events.filter(event => (!locality || event.locality === locality) && (!cinemaOnly || event.category.toLocaleLowerCase("ro-RO").includes("cinema"))), [events, locality, cinemaOnly]);
+  const visible = useMemo(() => {
+    const combined: EventItem[] = cinemaOnly ? [...events, ...cinemaScreenings] : events;
+    const seen = new Set<string>();
+    return combined.filter(event => {
+      if (locality && event.locality !== locality) return false;
+      if (cinemaOnly && !event.category.toLocaleLowerCase("ro-RO").includes("cinema")) return false;
+      const key = `${event.title.toLocaleLowerCase("ro-RO")}|${event.starts_at.slice(0, 16)}|${event.venue ?? ""}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).sort((a, b) => a.starts_at.localeCompare(b.starts_at));
+  }, [events, locality, cinemaOnly]);
   const days = useMemo(() => {
     const count = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
     return [...Array(mondayOffset(year, month)).fill(null), ...Array.from({ length: count }, (_, i) => i + 1)] as (number | null)[];
@@ -90,7 +102,7 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
       </div>
       <div style={{ marginTop: 20 }}>
         <h3 style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}><CalendarDays size={20}/> {new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${selected}T12:00:00Z`))}</h3>
-        {loading ? <p>Se încarcă evenimentele...</p> : error ? <p role="alert">Nu am putut încărca evenimentele: {error}</p> : selectedEvents.length === 0 ? <p>Nu avem evenimente confirmate pentru această zi și localitate. Încearcă o altă dată.</p> :
+        {loading && selectedEvents.length === 0 ? <p>Se încarcă evenimentele...</p> : error && selectedEvents.length === 0 ? <p role="alert">Nu am putut încărca evenimentele: {error}</p> : selectedEvents.length === 0 ? <p>Nu avem evenimente confirmate pentru această zi și localitate. Încearcă o altă dată.</p> :
           <div style={{ display: "grid", gap: 12 }}>
             {selectedEvents.map(event => <article key={event.id} style={{ background: "white", border: "1px solid #e9e3ed", borderRadius: 17, padding: 17 }}>
               <span style={{ color: "#7557d5", fontWeight: 700 }}>{localTime(event.starts_at)} · {event.category}</span>
@@ -105,7 +117,7 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
       </div>
       <div style={{ marginTop: 28 }}>
         <h3 style={{ marginBottom: 14 }}>Următoarele evenimente confirmate</h3>
-        {loading ? <p>Se încarcă...</p> : error ? <p role="alert">Nu am putut încărca lista: {error}</p> : upcoming.length === 0 ? <p>Nu sunt încă evenimente confirmate pentru perioada următoare.</p> :
+        {loading && upcoming.length === 0 ? <p>Se încarcă...</p> : error && upcoming.length === 0 ? <p role="alert">Nu am putut încărca lista: {error}</p> : upcoming.length === 0 ? <p>Nu sunt încă evenimente confirmate pentru perioada următoare.</p> :
           <div style={{ display: "grid", gap: 12 }}>
             {upcoming.map(event => <article key={event.id} style={{ border: "1px solid #e9e3ed", background: "#fff", borderRadius: 16, padding: 16 }}>
               <strong style={{ color: "#7456d8" }}>{new Intl.DateTimeFormat("ro-RO", { timeZone: zone, day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }).format(new Date(event.starts_at))}</strong>
