@@ -27,6 +27,11 @@ const places = ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița Nouă", "Ghiro
 export default function Home() {
   return (
     <main>
+      <section className="section" id="categorii">
+        <div className="section-heading"><div><span className="eyebrow">DESCOPERĂ CE I SE POTRIVEȘTE</span><h2>Explorează după <span>categorie</span></h2></div><Link className="text-link" href="/activitati">Toate categoriile <ArrowRight size={16}/></Link></div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,145px),1fr))",gap:14}}>{categories.map(({name,detail,icon:Icon,tone,slug,emoji}) => <Link href={`/activitati?category=${slug}`} key={slug} style={{display:"flex",flexDirection:"column",gap:10,padding:10,border:"1px solid #e5e0eb",borderRadius:20,background:"#fff",color:"#34294b",textDecoration:"none",minWidth:0}}><div className={"category-icon "+tone} style={{width:"100%",height:"auto",aspectRatio:"4/3",borderRadius:14,display:"grid",placeItems:"center",position:"relative",overflow:"hidden"}}><span aria-hidden="true" style={{fontSize:"clamp(42px,8vw,68px)",lineHeight:1}}>{emoji}</span><Icon aria-hidden="true" size={20} style={{position:"absolute",right:10,bottom:10,opacity:.65}}/></div><strong style={{fontSize:16,lineHeight:1.3,overflowWrap:"anywhere"}}>{name}</strong><small style={{lineHeight:1.4,color:"#62596e"}}>{detail}</small><ArrowRight size={17} style={{marginTop:"auto"}}/></Link>)}</div>
+      </section>
+
       <section className="section" style={{paddingTop:32,paddingBottom:24}}>
         <div className="section-heading"><div><span className="eyebrow">ALEGE CE CAUȚI</span><h2>Explorează <span>KidsCity</span></h2></div></div>
         <div className="category-grid">{quickSections.map(({name,detail,icon:Icon,tone,href})=><Link className="category-card" href={href} key={name}><span className={"category-icon "+tone}><Icon size={25}/></span><strong>{name}</strong><small>{detail}</small><ArrowRight className="category-arrow" size={18}/></Link>)}</div>
@@ -69,10 +74,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section" id="categorii">
-        <div className="section-heading"><div><span className="eyebrow">DESCOPERĂ CE I SE POTRIVEȘTE</span><h2>Explorează după <span>categorie</span></h2></div><Link className="text-link" href="/activitati">Toate categoriile <ArrowRight size={16}/></Link></div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,145px),1fr))",gap:14}}>{categories.map(({name,detail,icon:Icon,tone,slug,emoji}) => <Link href={`/activitati?category=${slug}`} key={slug} style={{display:"flex",flexDirection:"column",gap:10,padding:10,border:"1px solid #e5e0eb",borderRadius:20,background:"#fff",color:"#34294b",textDecoration:"none",minWidth:0}}><div className={"category-icon "+tone} style={{width:"100%",height:"auto",aspectRatio:"4/3",borderRadius:14,display:"grid",placeItems:"center",position:"relative",overflow:"hidden"}}><span aria-hidden="true" style={{fontSize:"clamp(42px,8vw,68px)",lineHeight:1}}>{emoji}</span><Icon aria-hidden="true" size={20} style={{position:"absolute",right:10,bottom:10,opacity:.65}}/></div><strong style={{fontSize:16,lineHeight:1.3,overflowWrap:"anywhere"}}>{name}</strong><small style={{lineHeight:1.4,color:"#62596e"}}>{detail}</small><ArrowRight size={17} style={{marginTop:"auto"}}/></Link>)}</div>
-      </section>
+
 
       <section className="trust-strip"><div><strong>Un singur loc</strong><span>pentru idei și activități</span></div><div><strong>Pe vârsta copilului</strong><span>recomandări mai potrivite</span></div><div><strong>Aproape de tine</strong><span>în Timișoara și localitățile vecine</span></div></section>
 
