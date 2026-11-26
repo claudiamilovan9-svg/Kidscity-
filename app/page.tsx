@@ -13,23 +13,15 @@ const quickSections = [
 ];
 
 const categories = [
-  { name: "Creșe & grădinițe", detail: "Locuri în care cei mici cresc frumos", icon: Baby, tone: "peach" },
-  { name: "Sport & mișcare", detail: "Energie, joacă și încredere", icon: Dumbbell, tone: "mint" },
-  { name: "Artă & creativitate", detail: "Desen, pictură și lucru manual", icon: Palette, tone: "lilac" },
-  { name: "Limbi străine", detail: "Primele cuvinte într-o lume nouă", icon: Languages, tone: "lemon" },
-  { name: "Muzică & dans", detail: "Ritm, sunet și voie bună", icon: Music2, tone: "pink" },
-  { name: "Ateliere & evenimente", detail: "Experiențe de ținut minte", icon: PartyPopper, tone: "blue" }
+{name:"Sport și mișcare",detail:"Energie și încredere",icon:Dumbbell,tone:"mint",slug:"sport-miscare",emoji:"⚽"},
+{name:"Artă și creativitate",detail:"Desen, pictură și modelaj",icon:Palette,tone:"lilac",slug:"arta-creativitate",emoji:"🎨"},
+{name:"Educație și STEM",detail:"Experimente și descoperiri",icon:GraduationCap,tone:"blue",slug:"educatie-stem",emoji:"🔬"},
+{name:"Muzică",detail:"Instrumente și canto",icon:Music2,tone:"pink",slug:"muzica",emoji:"🎹"},
+{name:"Limbi străine",detail:"O lume de cuvinte",icon:Languages,tone:"lemon",slug:"limbi-straine",emoji:"🌍"},
+{name:"Natură și aventură",detail:"Explorăm împreună",icon:Trees,tone:"mint",slug:"natura-aventura",emoji:"🌳"},
+{name:"Petreceri și evenimente",detail:"Momente de sărbătoare",icon:PartyPopper,tone:"pink",slug:"petreceri-evenimente",emoji:"🎈"},
+{name:"After-school și îngrijire",detail:"Învățare și grijă",icon:Baby,tone:"peach",slug:"after-school-ingrijire",emoji:"🧩"}
 ];
-
-const categoryRoutes: Record<string, string> = {
-  "Creșe & grădinițe": "after-school-ingrijire",
-  "Sport & mișcare": "sport-miscare",
-  "Artă & creativitate": "arta-creativitate",
-  "Limbi străine": "limbi-straine",
-  "Muzică & dans": "muzica",
-  "Ateliere & evenimente": "petreceri-evenimente",
-};
-
 const places = ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița Nouă", "Ghiroda"];
 
 export default function Home() {
@@ -64,7 +56,7 @@ export default function Home() {
             </label>
             <button type="submit" className="button search-button">Descoperă <ArrowRight size={17}/></button>
           </form>
-          <div className="hero-note"><ShieldCheck size={16}/> Furnizori locali · activități pentru fiecare vârstă</div>
+          <div className="hero-note"><ShieldCheck size={16}/> Explorează fără cont · Timișoara și împrejurimi</div>
         </div>
         <div className="hero-art" aria-label="Ilustrație decorativă cu forme colorate">
           <div className="sun"></div><div className="orbit orbit-one"></div><div className="orbit orbit-two"></div>
@@ -88,7 +80,7 @@ export default function Home() {
 
       <section className="section" id="categorii">
         <div className="section-heading"><div><span className="eyebrow">DESCOPERĂ CE I SE POTRIVEȘTE</span><h2>Explorează după <span>categorie</span></h2></div><Link className="text-link" href="/activitati">Toate categoriile <ArrowRight size={16}/></Link></div>
-        <div className="category-grid">{categories.map(({name,detail,icon:Icon,tone}) => <Link className="category-card" href={`/activitati?category=${categoryRoutes[name]}`} key={name}><span className={"category-icon "+tone}><Icon size={25}/></span><strong>{name}</strong><small>{detail}</small><ArrowRight className="category-arrow" size={18}/></Link>)}</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,145px),1fr))",gap:14}}>{categories.map(({name,detail,icon:Icon,tone,slug,emoji}) => <Link href={`/activitati?category=${slug}`} key={slug} style={{display:"flex",flexDirection:"column",gap:10,padding:10,border:"1px solid #e5e0eb",borderRadius:20,background:"#fff",color:"#34294b",textDecoration:"none",minWidth:0}}><div className={"category-icon "+tone} style={{width:"100%",height:"auto",aspectRatio:"4/3",borderRadius:14,display:"grid",placeItems:"center",position:"relative",overflow:"hidden"}}><span aria-hidden="true" style={{fontSize:"clamp(42px,8vw,68px)",lineHeight:1}}>{emoji}</span><Icon aria-hidden="true" size={20} style={{position:"absolute",right:10,bottom:10,opacity:.65}}/></div><strong style={{fontSize:16,lineHeight:1.3,overflowWrap:"anywhere"}}>{name}</strong><small style={{lineHeight:1.4,color:"#62596e"}}>{detail}</small><ArrowRight size={17} style={{marginTop:"auto"}}/></Link>)}</div>
       </section>
 
       <section className="local-section"><div><span className="eyebrow">APROAPE DE FAMILIA TA</span><h2>Descoperă activități <span>în zona ta</span></h2><p>Începem în Timișoara și comunitățile din jur, cu planuri de extindere în alte orașe.</p></div><div className="place-list">{places.map(place => <Link href={`/activitati?locality=${encodeURIComponent(place)}`} key={place}><MapPin size={16}/>{place}<ArrowRight size={15}/></Link>)}</div></section>
