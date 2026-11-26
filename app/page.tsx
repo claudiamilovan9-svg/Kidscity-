@@ -1,6 +1,16 @@
 import Link from "next/link";
-import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Compass, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper } from "lucide-react";
+import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Compass, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper, GraduationCap, CalendarDays, Trees, Film, Cake } from "lucide-react";
 import ActivityDirectory from "@/components/activity-directory";
+import EventsCalendar from "@/components/events-calendar";
+
+const quickSections = [
+  {name:"Cursuri pentru copii",detail:"Sport, dans, artă, limbi străine",icon:GraduationCap,tone:"lilac",href:"/activitati"},
+  {name:"Evenimente",detail:"Astăzi, mâine și în weekend",icon:CalendarDays,tone:"lemon",href:"/evenimente"},
+  {name:"Locuri de joacă și aventură",detail:"Explorează locurile din catalog",icon:Trees,tone:"mint",href:"/activitati?category=natura-aventura"},
+  {name:"Cinema",detail:"Filme și ore de proiecție",icon:Film,tone:"blue",href:"/cinema-pentru-copii"},
+  {name:"Creșe și grădinițe",detail:"Educație și îngrijire",icon:Baby,tone:"peach",href:"/activitati?category=after-school-ingrijire"},
+  {name:"Aniversări și petreceri",detail:"Locuri și organizatori",icon:Cake,tone:"pink",href:"/activitati?category=petreceri-evenimente"}
+];
 
 const categories = [
   { name: "Creșe & grădinițe", detail: "Locuri în care cei mici cresc frumos", icon: Baby, tone: "peach" },
@@ -25,29 +35,15 @@ const places = ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița Nouă", "Ghiro
 export default function Home() {
   return (
     <main>
-      <header className="site-header">
-        <Link className="brand" href="/"><span className="brand-mark">K</span><span>kids<span className="brand-city">city</span><small>CREȘTEM ÎMPREUNĂ</small></span></Link>
-        <nav className="desktop-nav"><Link href="/activitati">Cursuri și activități</Link><Link href="/evenimente">Evenimente</Link><Link href="/cinema-pentru-copii">Cinema pentru copii</Link><Link href="/furnizori">Furnizori</Link><a href="#cum-functioneaza">Cum funcționează</a><a href="#furnizori">Pentru furnizori</a></nav>
-        <div className="header-actions"><Link className="login-link" href="/autentificare">Intră în cont</Link><Link className="button button-small" href="/inscriere">Creează cont</Link></div>
-      </header>
-      <nav className="mobile-nav" aria-label="Navigare rapidă">
-        <Link href="#categorii">Categorii</Link>
-        <Link href="/activitati">Cursuri</Link>
-        <Link href="/evenimente">Evenimente</Link>
-        <Link href="/cinema-pentru-copii">Cinema</Link>
-        <Link href="/furnizori">Furnizori</Link>
-        <Link href="#furnizori">Pentru organizatori</Link>
-      </nav>
-
       <section className="hero">
         <div className="hero-copy">
           <div className="eyebrow"><Sparkles size={15}/> LUMEA ACTIVITĂȚILOR PENTRU COPII</div>
-          <h1>Copilăria e plină de <span>posibilități.</span></h1>
+          <h1>O lume de <span>posibilități</span> pentru copilul tău.</h1>
           <p className="hero-lead">Descoperă locuri, cursuri și experiențe care îl ajută pe cel mic să crească, să învețe și să se bucure.</p>
           <form className="search-panel" action="/activitati" method="get">
             <label>
               <Search size={18}/>
-              <span><small>Ce căutăm?</small><input id="home-search" name="q" type="search" placeholder="Sport, artă, dans..." /></span>
+              <span><small>Ce căutăm?</small><input id="home-search" name="q" type="search" placeholder="Înot, dans, engleză..." /></span>
             </label>
             <label>
               <MapPin size={18}/>
@@ -78,6 +74,12 @@ export default function Home() {
       <section className="trust-strip"><div><strong>Un singur loc</strong><span>pentru idei și activități</span></div><div><strong>Pe vârsta copilului</strong><span>recomandări mai potrivite</span></div><div><strong>Aproape de tine</strong><span>în Timișoara și localitățile vecine</span></div></section>
 
 
+      <section className="section" style={{paddingTop:32,paddingBottom:24}}>
+        <div className="section-heading"><div><span className="eyebrow">ALEGE CE CAUȚI</span><h2>Explorează <span>KidsCity</span></h2></div></div>
+        <div className="category-grid">{quickSections.map(({name,detail,icon:Icon,tone,href})=><Link className="category-card" href={href} key={name}><span className={"category-icon "+tone}><Icon size={25}/></span><strong>{name}</strong><small>{detail}</small><ArrowRight className="category-arrow" size={18}/></Link>)}</div>
+        <Link className="text-link" style={{marginTop:16}} href="/activitati?q=loc%20de%20joac%C4%83">Caută și locuri de joacă în catalog <ArrowRight size={16}/></Link>
+      </section>
+      <EventsCalendar compact />
       <ActivityDirectory compact />
 
       <section className="section" id="categorii">
