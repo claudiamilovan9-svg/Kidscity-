@@ -164,6 +164,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         <button className="filter-reset" onClick={reset}><SlidersHorizontal size={15}/> Resetează</button>
       </div>
 
+      {!compact && <div style={{display:"flex",flexWrap:"wrap",gap:10,alignItems:"center",margin:"16px 0 24px"}}><strong style={{color:"#7456d8"}}>Cursuri și activități regulate</strong><Link href="/evenimente" style={{color:"#7456d8",fontWeight:700,textDecoration:"underline"}}>Spectacole și ateliere de o zi →</Link></div>}
       <div className="directory-results-head"><strong>{loading ? "Se încarcă activitățile..." : error ? "Activitățile nu au putut fi verificate" : `${filtered.length} ${filtered.length === 1 ? "activitate" : "activități"} găsite`}</strong><span>Activități din surse publice · confirmare directă necesară</span></div>
       {loading ? <div className="directory-state"><LoaderCircle className="spin" size={25}/> Încărcăm opțiunile pentru familia ta...</div> :
         error ? <div className="directory-state directory-error">{error}</div> :
