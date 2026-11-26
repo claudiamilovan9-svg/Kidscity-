@@ -28,6 +28,10 @@ type Activity = {
   location: { name: string } | null;
 };
 
+function normalizeSearch(value: string | null | undefined): string {
+  return (value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("ro").trim().replace(/\s+/g, " ");
+}
+
 const fallbackLocalities = ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița Nouă", "Ghiroda"];
 const fallbackCategories = [
   { slug: "sport-miscare", name: "Sport și mișcare" },
@@ -103,8 +107,8 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
   }, [activities]);
 
   const filtered = useMemo(() => activities.filter(a => {
-    const term = search.trim().toLocaleLowerCase("ro");
-    const matchesSearch = !term || [a.title, a.description, a.provider_name, a.category?.name, a.location?.name].some(v => v?.toLocaleLowerCase("ro").includes(term));
+    const term = normalizeSearch(search);
+    const matchesSearch = !term || [a.title, a.description, a.provider_name, a.category?.name, a.location?.name].some(v => normalizeSearch(v).includes(term));
     const matchesAge = !age || (() => { const option = ageOptions.find(o => o.label === age); return !!option && a.min_age_months <= option.max && a.max_age_months >= option.min; })();
     const matchesPrice = !maxPrice || (a.price_max_amount !== null && a.price_max_amount <= Number(maxPrice));
     return matchesSearch && (!locality || a.location?.name === locality) && (!category || a.category?.slug === category) && matchesAge && matchesPrice;
