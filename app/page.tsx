@@ -35,6 +35,10 @@ const places = ["Timișoara", "Dumbrăvița", "Giroc", "Moșnița Nouă", "Ghiro
 export default function Home() {
   return (
     <main>
+      <aside aria-label="KidsCity în perioada de testare" style={{margin:"16px auto 0",width:"calc(100% - 32px)",maxWidth:1120,boxSizing:"border-box",padding:"14px 18px",border:"1px solid #e5dcef",borderRadius:16,background:"#f8f5fc",color:"#49365f",lineHeight:1.6,fontSize:14}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}><span style={{background:"#e9dff5",borderRadius:8,padding:"2px 8px",fontSize:11,fontWeight:700,letterSpacing:1}}>BETA</span><strong>KidsCity este în perioada de testare</strong></div>
+        <p style={{margin:"6px 0 0"}}>Construim o platformă dedicată familiilor din Timișoara și împrejurimi. Catalogul este în continuă dezvoltare, iar informațiile sunt actualizate progresiv. Feedbackul vostru ne ajută să îmbunătățim experiența KidsCity. ❤️</p>
+      </aside>
       <section className="hero">
         <div className="hero-copy">
           <div className="eyebrow"><Sparkles size={15}/> LUMEA ACTIVITĂȚILOR PENTRU COPII</div>
