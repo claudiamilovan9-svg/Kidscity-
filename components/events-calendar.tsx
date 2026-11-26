@@ -24,6 +24,7 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
   const [year, setYear] = useState(Number(today.slice(0, 4)));
   const [month, setMonth] = useState(Number(today.slice(5, 7)) - 1);
   const [locality, setLocality] = useState("");
+  const [freeOnly, setFreeOnly] = useState(false);
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -53,13 +54,14 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
     const seen = new Set<string>();
     return combined.filter(event => {
       if (locality && event.locality !== locality) return false;
+      if (freeOnly && !/^(gratuit[ăe]?|intrare liberă|acces liber|0\s*(lei|ron))\b/i.test((event.price_label ?? "").trim())) return false;
       if (cinemaOnly && !event.category.toLocaleLowerCase("ro-RO").includes("cinema")) return false;
       const key = `${event.title.toLocaleLowerCase("ro-RO")}|${event.starts_at.slice(0, 16)}|${event.venue ?? ""}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
     }).sort((a, b) => a.starts_at.localeCompare(b.starts_at));
-  }, [events, locality, cinemaOnly]);
+  }, [events, locality, cinemaOnly, freeOnly]);
   const days = useMemo(() => {
     const count = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
     return [...Array(mondayOffset(year, month)).fill(null), ...Array.from({ length: count }, (_, i) => i + 1)] as (number | null)[];
@@ -80,13 +82,14 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
   return (
     <section id="calendar-evenimente" className={compact ? "section" : "directory-section directory-full"} style={{ maxWidth: 1120, margin: "32px auto", padding: "24px 18px" }}>
       <div className="section-heading">
-        <div><span className="eyebrow">KIDSCITY · ÎN ORAȘUL TĂU</span><h2>{compact ? <>Ce facem cu copiii <span>în acest weekend?</span></> : <>{cinemaOnly ? <>Cinema <span>pentru copii</span></> : <>Evenimente <span>în oraș</span></>}</>}</h2><p>{compact ? "Evenimente în oraș · Timișoara, Dumbrăvița și împrejurimi. Alege o zi și descoperă ce se întâmplă." : (cinemaOnly ? "Proiecții pentru copii în Timișoara și împrejurimi. Afișăm doar programările confirmate." : "Calendarul evenimentelor pentru copii din Timișoara, Dumbrăvița și împrejurimi, cu surse publice verificate.")}</p></div>
+        <div><span className="eyebrow">KIDSCITY · ÎN ORAȘUL TĂU</span><h2>{compact ? <>Ce facem <span>cu cei mici?</span></> : <>{cinemaOnly ? <>Cinema <span>pentru copii</span></> : <>Evenimente <span>în oraș</span></>}</>}</h2><p>{compact ? "Evenimente în oraș · Timișoara, Dumbrăvița și împrejurimi. Alege o zi și descoperă ce se întâmplă." : (cinemaOnly ? "Proiecții pentru copii în Timișoara și împrejurimi. Afișăm doar programările confirmate." : "Calendarul evenimentelor pentru copii din Timișoara, Dumbrăvița și împrejurimi, cu surse publice verificate.")}</p></div>
         {compact && <Link className="text-link" href="/evenimente">Calendar complet <ArrowRight size={16}/></Link>}
       </div>
       <div style={{ display: "flex", gap: 9, flexWrap: "wrap", margin: "18px 0" }}>
         <button className="filter-reset" onClick={() => onDay(today)}>Astăzi</button>
         <button className="filter-reset" onClick={() => { const d = new Date(todayDate.getTime() + 86400000); onDay(dayKey(d)); }}>Mâine</button>
         <button className="filter-reset" onClick={() => onDay(dayKey(saturday))}>Weekend</button>
+        <button className="filter-reset" aria-pressed={freeOnly} onClick={() => setFreeOnly(v => !v)}>{freeOnly ? "✓ Gratuit" : "Gratuit"}</button>
         <label style={{ display: "flex", alignItems: "center", gap: 8 }}>Localitate <select aria-label="Filtrează localitatea" value={locality} onChange={e => setLocality(e.target.value)} style={{ padding: 9, borderRadius: 10, border: "1px solid #ddd5e8", background: "white" }}><option value="">Toate</option><option>Timișoara</option><option>Dumbrăvița</option><option>Giroc</option><option>Moșnița Nouă</option><option>Ghiroda</option></select></label>
       </div>
       <div style={{ background: "#fbf5ff", border: "1px solid #eee4f5", borderRadius: 22, padding: 16 }}>
