@@ -67,6 +67,11 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section" id="categorii">
+        <div className="section-heading"><div><span className="eyebrow">DESCOPERĂ CE I SE POTRIVEȘTE</span><h2>Explorează după <span>categorie</span></h2></div><Link className="text-link" href="/activitati">Toate categoriile <ArrowRight size={16}/></Link></div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,145px),1fr))",gap:14}}>{categories.map(({name,detail,icon:Icon,tone,slug,emoji}) => <Link href={`/activitati?category=${slug}`} key={slug} style={{display:"flex",flexDirection:"column",gap:10,padding:10,border:"1px solid #e5e0eb",borderRadius:20,background:"#fff",color:"#34294b",textDecoration:"none",minWidth:0}}><div className={"category-icon "+tone} style={{width:"100%",height:"auto",aspectRatio:"4/3",borderRadius:14,display:"grid",placeItems:"center",position:"relative",overflow:"hidden"}}><span aria-hidden="true" style={{fontSize:"clamp(42px,8vw,68px)",lineHeight:1}}>{emoji}</span><Icon aria-hidden="true" size={20} style={{position:"absolute",right:10,bottom:10,opacity:.65}}/></div><strong style={{fontSize:16,lineHeight:1.3,overflowWrap:"anywhere"}}>{name}</strong><small style={{lineHeight:1.4,color:"#62596e"}}>{detail}</small><ArrowRight size={17} style={{marginTop:"auto"}}/></Link>)}</div>
+      </section>
+
       <section className="trust-strip"><div><strong>Un singur loc</strong><span>pentru idei și activități</span></div><div><strong>Pe vârsta copilului</strong><span>recomandări mai potrivite</span></div><div><strong>Aproape de tine</strong><span>în Timișoara și localitățile vecine</span></div></section>
 
 
@@ -78,10 +83,7 @@ export default function Home() {
       <EventsCalendar compact />
       <ActivityDirectory compact />
 
-      <section className="section" id="categorii">
-        <div className="section-heading"><div><span className="eyebrow">DESCOPERĂ CE I SE POTRIVEȘTE</span><h2>Explorează după <span>categorie</span></h2></div><Link className="text-link" href="/activitati">Toate categoriile <ArrowRight size={16}/></Link></div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,145px),1fr))",gap:14}}>{categories.map(({name,detail,icon:Icon,tone,slug,emoji}) => <Link href={`/activitati?category=${slug}`} key={slug} style={{display:"flex",flexDirection:"column",gap:10,padding:10,border:"1px solid #e5e0eb",borderRadius:20,background:"#fff",color:"#34294b",textDecoration:"none",minWidth:0}}><div className={"category-icon "+tone} style={{width:"100%",height:"auto",aspectRatio:"4/3",borderRadius:14,display:"grid",placeItems:"center",position:"relative",overflow:"hidden"}}><span aria-hidden="true" style={{fontSize:"clamp(42px,8vw,68px)",lineHeight:1}}>{emoji}</span><Icon aria-hidden="true" size={20} style={{position:"absolute",right:10,bottom:10,opacity:.65}}/></div><strong style={{fontSize:16,lineHeight:1.3,overflowWrap:"anywhere"}}>{name}</strong><small style={{lineHeight:1.4,color:"#62596e"}}>{detail}</small><ArrowRight size={17} style={{marginTop:"auto"}}/></Link>)}</div>
-      </section>
+
 
       <section className="local-section"><div><span className="eyebrow">APROAPE DE FAMILIA TA</span><h2>Descoperă activități <span>în zona ta</span></h2><p>Începem în Timișoara și comunitățile din jur, cu planuri de extindere în alte orașe.</p></div><div className="place-list">{places.map(place => <Link href={`/activitati?locality=${encodeURIComponent(place)}`} key={place}><MapPin size={16}/>{place}<ArrowRight size={15}/></Link>)}</div></section>
 
