@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Search, MapPin, Heart, ShieldCheck, Sparkles, Compass, Palette, Dumbbell, Languages, Music2, Baby, PartyPopper, GraduationCap, CalendarDays, Trees, Film, Cake, CloudRain, Bell, Star, MessageCircle, CalendarCheck } from "lucide-react";
 import ActivityDirectory from "@/components/activity-directory";
 import EventsCalendar from "@/components/events-calendar";
@@ -34,7 +35,7 @@ export default function Home() {
 
       <section className="section" style={{paddingTop:32,paddingBottom:24}}>
         <div className="section-heading"><div><span className="eyebrow">ALEGE CE CAUȚI</span><h2>Explorează <span>KidsCity</span></h2></div></div>
-        <div className="category-grid">{quickSections.map(({name,detail,icon:Icon,tone,href})=><Link className="category-card" href={href} key={name}><span className={"category-icon "+tone}><Icon size={25}/></span><strong>{name}</strong><small>{detail}</small><ArrowRight className="category-arrow" size={18}/></Link>)}</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:"clamp(10px,2vw,20px)"}}>{quickSections.map(({name,detail,icon:Icon,tone,href},index)=><Link href={href} key={name} style={{display:"flex",flexDirection:"column",minWidth:0,overflow:"hidden",borderRadius:22,background:"#fff",border:"1px solid #eee5f0",boxShadow:"0 4px 12px #34294b14",color:"#211b42",textDecoration:"none"}}><div style={{position:"relative",width:"100%",aspectRatio:"2.5 / 1",overflow:"hidden"}}><Image src={`/images/${["cursuri","evenimente","joaca","cinema","gradinite","aniversari"][index]}.webp`} alt="" fill sizes="(max-width: 768px) 50vw, 560px" style={{objectFit:"cover"}}/></div><div style={{display:"flex",alignItems:"center",gap:"clamp(5px,1vw,12px)",padding:"clamp(8px,1.5vw,16px)",flex:1}}><span className={"category-icon "+tone} style={{flexShrink:0,width:"clamp(28px,5vw,54px)",height:"clamp(28px,5vw,54px)"}}><Icon size={22}/></span><div style={{minWidth:0,flex:1}}><strong style={{display:"block",fontSize:"clamp(12px,2vw,20px)",lineHeight:1.25,overflowWrap:"anywhere"}}>{name}</strong><small style={{display:"block",fontSize:"clamp(10px,1.5vw,15px)",lineHeight:1.35,marginTop:4,color:"#62596e"}}>{detail}</small></div><ArrowRight size={18} style={{flexShrink:0,color:"#7139e8",width:"clamp(12px,2vw,20px)"}}/></div></Link>)}</div>
         <Link className="text-link" style={{marginTop:16}} href="/activitati?q=loc%20de%20joac%C4%83">Caută și locuri de joacă în catalog <ArrowRight size={16}/></Link>
       </section>
 
