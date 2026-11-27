@@ -1,0 +1,4 @@
+import type { Metadata } from "next";
+import LegalPage from "../legal/LegalPage";
+export const metadata: Metadata = {title: "Termeni și condiții | KidsCity", robots:{index:false,follow:false}};
+export default function Page(){return <LegalPage title="Termeni și condiții" active="/termeni-si-conditii" sections={[{"title":"Despre KidsCity","body":"Conținut în curs de definitivare și validare."},{"title":"Conturi și eligibilitate","body":"Conținut în curs de definitivare și validare."},{"title":"Utilizarea platformei","body":"Conținut în curs de definitivare și validare."},{"title":"Furnizori și activități","body":"Conținut în curs de definitivare și validare."},{"title":"Rezervări","body":"Conținut în curs de definitivare și validare."},{"title":"Responsabilități","body":"Conținut în curs de definitivare și validare."},{"title":"Contact","body":"Conținut în curs de definitivare și validare."}]}/>;}
