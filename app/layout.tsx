@@ -36,6 +36,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <nav className="kc-global-links" aria-label="Navigare principală">{links.map(([href,label])=><Link key={href} href={href}>{label}</Link>)}</nav>
         </div>
         {children}
+        <footer aria-label="Informații juridice" style={{borderTop:'1px solid #eee9ff',padding:'24px 16px',display:'flex',flexWrap:'wrap',justifyContent:'center',gap:'16px',fontSize:'13px',color:'#5843a8'}}><Link href="/confidentialitate">Confidențialitate (în pregătire)</Link><Link href="/termeni-si-conditii">Termeni și condiții</Link><Link href="/cookies">Cookies</Link><a href="mailto:contact@kidscityapp.ro">Contact</a></footer>
       </body>
     </html>
   );
