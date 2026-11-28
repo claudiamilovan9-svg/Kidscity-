@@ -1401,7 +1401,7 @@ const priorScreeningsDecember1 = [...priorScreeningsNovember30, ...[
   }
 ]];
 
-export const cinemaScreenings = [...priorScreeningsDecember1, ...[
+const priorScreeningsDecember2 = [...priorScreeningsDecember1, ...[
   {
     "id": "cinema-1802-2026-12-01-Cotoi cu pălărioi-12:00",
     "title": "Cotoi cu pălărioi",
@@ -1716,5 +1716,113 @@ export const cinemaScreenings = [...priorScreeningsDecember1, ...[
     "description": "2D · Dublat · Program 01.12.2026 · Confirmă la cinema",
     "source_url": "https://www.cinemagia.ro/program-cinema/cinema-city-shopping-city-timisoara/marti/?program_cinema_day_layout=detaliat_pe_ore",
     "ticket_url": "https://www.cinemacity.ro/cinemas/timisoara-shopping-city/1823"
+  }
+]];
+
+export const cinemaScreenings = [...priorScreeningsDecember2, ...[
+  {
+    "id": "cinema-1802-2026-12-02-Cotoi cu pălărioi-14:00",
+    "title": "Cotoi cu pălărioi",
+    "organizer": "Cinema City",
+    "locality": "Timișoara",
+    "venue": "Cinema City Iulius Mall",
+    "category": "Cinema pentru copii",
+    "starts_at": "2026-12-02T14:00:00+02:00",
+    "ends_at": null,
+    "age_label": "Verifică clasificarea",
+    "price_label": null,
+    "description": "3D · Dublat în română · Program 02.12.2026 · Confirmă la cinema",
+    "source_url": "https://m.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?from_date=02.12.2026",
+    "ticket_url": "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802"
+  },
+  {
+    "id": "cinema-1802-2026-12-02-Hexe: Regatul magiei-12:30",
+    "title": "Hexe: Regatul magiei",
+    "organizer": "Cinema City",
+    "locality": "Timișoara",
+    "venue": "Cinema City Iulius Mall",
+    "category": "Cinema pentru copii",
+    "starts_at": "2026-12-02T12:30:00+02:00",
+    "ends_at": null,
+    "age_label": "Verifică clasificarea",
+    "price_label": null,
+    "description": "3D · Verifică versiunea lingvistică · Program 02.12.2026 · Confirmă la cinema",
+    "source_url": "https://m.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?from_date=02.12.2026",
+    "ticket_url": "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802"
+  },
+  {
+    "id": "cinema-1802-2026-12-02-Hexe: Regatul magiei-16:50",
+    "title": "Hexe: Regatul magiei",
+    "organizer": "Cinema City",
+    "locality": "Timișoara",
+    "venue": "Cinema City Iulius Mall",
+    "category": "Cinema pentru copii",
+    "starts_at": "2026-12-02T16:50:00+02:00",
+    "ends_at": null,
+    "age_label": "Verifică clasificarea",
+    "price_label": null,
+    "description": "3D · Verifică versiunea lingvistică · Program 02.12.2026 · Confirmă la cinema",
+    "source_url": "https://m.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?from_date=02.12.2026",
+    "ticket_url": "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802"
+  },
+  {
+    "id": "cinema-1802-2026-12-02-Hexe: Regatul magiei-14:15",
+    "title": "Hexe: Regatul magiei",
+    "organizer": "Cinema City",
+    "locality": "Timișoara",
+    "venue": "Cinema City Iulius Mall",
+    "category": "Cinema pentru copii",
+    "starts_at": "2026-12-02T14:15:00+02:00",
+    "ends_at": null,
+    "age_label": "Verifică clasificarea",
+    "price_label": null,
+    "description": "3D · Subtitrat în română · Program 02.12.2026 · Confirmă la cinema",
+    "source_url": "https://m.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?from_date=02.12.2026",
+    "ticket_url": "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802"
+  },
+  {
+    "id": "cinema-1802-2026-12-02-Hexe: Regatul magiei-19:20",
+    "title": "Hexe: Regatul magiei",
+    "organizer": "Cinema City",
+    "locality": "Timișoara",
+    "venue": "Cinema City Iulius Mall",
+    "category": "Cinema pentru copii",
+    "starts_at": "2026-12-02T19:20:00+02:00",
+    "ends_at": null,
+    "age_label": "Verifică clasificarea",
+    "price_label": null,
+    "description": "3D · Subtitrat în română · Program 02.12.2026 · Confirmă la cinema",
+    "source_url": "https://m.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?from_date=02.12.2026",
+    "ticket_url": "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802"
+  },
+  {
+    "id": "cinema-1802-2026-12-02-Micul mamut: Aventuri în Africa-15:25",
+    "title": "Micul mamut: Aventuri în Africa",
+    "organizer": "Cinema City",
+    "locality": "Timișoara",
+    "venue": "Cinema City Iulius Mall",
+    "category": "Cinema pentru copii",
+    "starts_at": "2026-12-02T15:25:00+02:00",
+    "ends_at": null,
+    "age_label": "Verifică clasificarea",
+    "price_label": null,
+    "description": "2D · Dublat în română · Program 02.12.2026 · Confirmă la cinema",
+    "source_url": "https://m.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?from_date=02.12.2026",
+    "ticket_url": "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802"
+  },
+  {
+    "id": "cinema-1802-2026-12-02-Micul mamut: Aventuri în Africa-17:10",
+    "title": "Micul mamut: Aventuri în Africa",
+    "organizer": "Cinema City",
+    "locality": "Timișoara",
+    "venue": "Cinema City Iulius Mall",
+    "category": "Cinema pentru copii",
+    "starts_at": "2026-12-02T17:10:00+02:00",
+    "ends_at": null,
+    "age_label": "Verifică clasificarea",
+    "price_label": null,
+    "description": "2D · Dublat în română · Program 02.12.2026 · Confirmă la cinema",
+    "source_url": "https://m.cinemagia.ro/program-cinema/cinema-city-iulius-mall-timisoara/?from_date=02.12.2026",
+    "ticket_url": "https://www.cinemacity.ro/cinemas/timisoara-iulius-mall/1802"
   }
 ]];
