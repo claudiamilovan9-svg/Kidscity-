@@ -62,13 +62,23 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
   const [category, setCategory] = useState("");
   const [age, setAge] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [entryMode, setEntryMode] = useState<"pending" | "browse" | "filtered">("pending");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setSearch(params.get("q") ?? "");
     setLocality(params.get("locality") ?? "");
     setCategory(params.get("category") ?? "");
+    const direct = Boolean(params.get("category") || params.get("q") || params.get("locality"));
+    setEntryMode(direct ? "filtered" : "browse");
   }, []);
+
+  useEffect(() => {
+    if (!compact && entryMode === "filtered") {
+      const frame = requestAnimationFrame(() => document.getElementById("activity-filters")?.scrollIntoView({ block: "start" }));
+      return () => cancelAnimationFrame(frame);
+    }
+  }, [compact, entryMode]);
 
   useEffect(() => {
     let active = true;
@@ -156,7 +166,7 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         {compact && <Link className="text-link" href="/activitati">Vezi toate activitățile <ArrowRight size={16}/></Link>}
       </div>
 
-      {!compact && <section aria-label="Alege categoria" style={{margin:"0 0 24px"}}>
+      {!compact && entryMode === "browse" && <section aria-label="Alege categoria" style={{margin:"0 0 24px"}}>
         <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:"clamp(10px,2vw,20px)"}}>
           {[
             {name:"Sport și mișcare",detail:"Fotbal, înot, tenis, gimnastică",slug:"sport-miscare",q:"",image:"joaca",emoji:"⚽"},
@@ -174,7 +184,8 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         </div>
         <button type="button" className="filter-reset" style={{marginTop:16}} onClick={()=>{reset();document.getElementById("activity-filters")?.scrollIntoView({behavior:"smooth",block:"center"});}}>Vezi toate cursurile <ArrowRight size={16}/></button>
       </section>}
-      <div className="directory-tools" id="activity-filters">
+      {!compact && entryMode === "filtered" && <Link className="text-link" href="/activitati" onClick={() => { reset(); setEntryMode("browse"); }}>Explorează toate categoriile <ArrowRight size={16}/></Link>}
+      <div className="directory-tools" id="activity-filters" style={{scrollMarginTop:"160px"}}>
         <label className="directory-search"><Search size={18}/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Caută sport, dans, pictură sau furnizor..." /></label>
         <label><span>Localitate</span><select value={locality} onChange={e => setLocality(e.target.value)}><option value="">Toate localitățile</option>{localities.map(v => <option key={v}>{v}</option>)}</select></label>
         <label><span>Categorie</span><select value={category} onChange={e => setCategory(e.target.value)}><option value="">Toate categoriile</option>{categories.map(v => <option key={v.slug} value={v.slug}>{v.name}</option>)}</select></label>
