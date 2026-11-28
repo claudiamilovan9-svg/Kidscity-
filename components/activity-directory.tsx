@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@supabase/supabase-js";
 import { MapPin, Search, SlidersHorizontal, ArrowRight, LoaderCircle, Sparkles } from "lucide-react";
 
@@ -155,7 +156,25 @@ export default function ActivityDirectory({ compact = false }: { compact?: boole
         {compact && <Link className="text-link" href="/activitati">Vezi toate activitățile <ArrowRight size={16}/></Link>}
       </div>
 
-      <div className="directory-tools">
+      {!compact && <section aria-label="Alege categoria" style={{margin:"0 0 24px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:"clamp(10px,2vw,20px)"}}>
+          {[
+            {name:"Sport și mișcare",detail:"Fotbal, înot, tenis, gimnastică",slug:"sport-miscare",q:"",image:"joaca",emoji:"⚽"},
+            {name:"Dans și balet",detail:"Dans modern, balet",slug:"",q:"dans",image:"cursuri",emoji:"💃"},
+            {name:"Artă și creativitate",detail:"Pictură, desen, modelaj",slug:"arta-creativitate",q:"",image:"cursuri",emoji:"🎨"},
+            {name:"Muzică și canto",detail:"Instrumente și voce",slug:"muzica",q:"",image:"cursuri",emoji:"🎵"},
+            {name:"Limbi străine",detail:"Engleză, germană, franceză",slug:"limbi-straine",q:"",image:"gradinite",emoji:"🌍"},
+            {name:"Robotică și tehnologie",detail:"Programare și STEM",slug:"educatie-stem",q:"",image:"gradinite",emoji:"🤖"},
+            {name:"Educație și dezvoltare",detail:"Învățare și descoperire",slug:"educatie-stem",q:"",image:"gradinite",emoji:"📚"},
+            {name:"Teatru și actorie",detail:"Expresivitate și scenă",slug:"",q:"teatru",image:"evenimente",emoji:"🎭"}
+          ].map(item=><button type="button" key={item.name} onClick={()=>{setCategory(item.slug);setSearch(item.q);document.getElementById("activity-filters")?.scrollIntoView({behavior:"smooth",block:"center"});}} style={{display:"flex",flexDirection:"column",minWidth:0,overflow:"hidden",borderRadius:22,background:"#fff",border:"1px solid #eee5f0",boxShadow:"0 4px 12px #34294b14",color:"#211b42",padding:0,textAlign:"left",cursor:"pointer",font:"inherit"}}>
+            <div style={{position:"relative",width:"100%",aspectRatio:"2.5 / 1",overflow:"hidden"}}><Image src={`/images/${item.image}.webp`} alt="" fill sizes="(max-width:768px) 50vw, 560px" style={{objectFit:"cover"}}/></div>
+            <div style={{display:"flex",alignItems:"center",gap:8,padding:"clamp(8px,1.5vw,16px)",flex:1}}><span aria-hidden="true" style={{fontSize:22}}>{item.emoji}</span><div style={{minWidth:0,flex:1}}><strong style={{display:"block",fontSize:"clamp(13px,2vw,20px)",lineHeight:1.25}}>{item.name}</strong><small style={{display:"block",color:"#62596e",marginTop:4,lineHeight:1.35}}>{item.detail}</small></div><ArrowRight size={16} style={{flexShrink:0,color:"#7139e8"}}/></div>
+          </button>)}
+        </div>
+        <button type="button" className="filter-reset" style={{marginTop:16}} onClick={()=>{reset();document.getElementById("activity-filters")?.scrollIntoView({behavior:"smooth",block:"center"});}}>Vezi toate cursurile <ArrowRight size={16}/></button>
+      </section>}
+      <div className="directory-tools" id="activity-filters">
         <label className="directory-search"><Search size={18}/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Caută sport, dans, pictură sau furnizor..." /></label>
         <label><span>Localitate</span><select value={locality} onChange={e => setLocality(e.target.value)}><option value="">Toate localitățile</option>{localities.map(v => <option key={v}>{v}</option>)}</select></label>
         <label><span>Categorie</span><select value={category} onChange={e => setCategory(e.target.value)}><option value="">Toate categoriile</option>{categories.map(v => <option key={v.slug} value={v.slug}>{v.name}</option>)}</select></label>
