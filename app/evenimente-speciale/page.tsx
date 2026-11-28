@@ -1,0 +1,3 @@
+import EventsCalendar from "@/components/events-calendar";
+import Link from "next/link";
+export default function SpecialEventsPage(){return <main className="listing-page"><div style={{maxWidth:1120,margin:"24px auto",padding:"24px",borderRadius:22,background:"#f8f1ff",color:"#34294b"}}><span className="eyebrow">EVENIMENTE SPECIALE</span><h1>🎄 Magia Crăciunului în KidsCity</h1><p>Târguri, colinde, ateliere și spectacole pentru întreaga familie.</p><Link href="/evenimente">Vezi calendarul general →</Link></div><EventsCalendar christmasOnly/></main>}
