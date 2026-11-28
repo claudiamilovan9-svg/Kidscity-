@@ -40,11 +40,11 @@ function FilmCards({items}:{items:EventItem[]}) {
  </article>})}</div>;
 }
 
-export default function EventsCalendar({ compact = false, cinemaOnly = false }: { compact?: boolean; cinemaOnly?: boolean }) {
+export default function EventsCalendar({ compact = false, cinemaOnly = false, christmasOnly = false }: { compact?: boolean; cinemaOnly?: boolean; christmasOnly?: boolean }) {
   const [today] = useState(todayKey);
-  const [selected, setSelected] = useState(today);
+  const [selected, setSelected] = useState(christmasOnly && today < `${today.slice(0,4)}-12-01` ? `${today.slice(0,4)}-12-01` : today);
   const [year, setYear] = useState(Number(today.slice(0, 4)));
-  const [month, setMonth] = useState(Number(today.slice(5, 7)) - 1);
+  const [month, setMonth] = useState(christmasOnly ? 11 : Number(today.slice(5, 7)) - 1);
   const [locality, setLocality] = useState("");
   const [freeOnly, setFreeOnly] = useState(false);
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -75,6 +75,7 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
     const combined: EventItem[] = cinemaOnly ? [...events, ...cinemaScreenings] : events;
     const seen = new Set<string>();
     return combined.filter(event => {
+      if (christmasOnly && !/craciun|mos nicolae|grinch|polar express|noelle|colind|poveste de iarna|bradutul|spargatorul de nuci/i.test(`${event.title} ${event.category}`.normalize("NFD").replace(/[\u0300-\u036f]/g,""))) return false;
       if (locality && event.locality !== locality) return false;
       if (freeOnly && !/^(gratuit[ăe]?|intrare liberă|acces liber|0\s*(lei|ron))\b/i.test((event.price_label ?? "").trim())) return false;
       if (cinemaOnly && !event.category.toLocaleLowerCase("ro-RO").includes("cinema")) return false;
@@ -83,7 +84,7 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
       seen.add(key);
       return true;
     }).sort((a, b) => a.starts_at.localeCompare(b.starts_at));
-  }, [events, locality, cinemaOnly, freeOnly]);
+  }, [events, locality, cinemaOnly, freeOnly, christmasOnly]);
   const days = useMemo(() => {
     const count = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
     return [...Array(mondayOffset(year, month)).fill(null), ...Array.from({ length: count }, (_, i) => i + 1)] as (number | null)[];
@@ -104,9 +105,10 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
   return (
     <section id="calendar-evenimente" className={compact ? "section" : "directory-section directory-full"} style={{ maxWidth: 1120, margin: "32px auto", padding: "24px 18px" }}>
       <div className="section-heading">
-        <div><span className="eyebrow">KIDSCITY · ÎN ORAȘUL TĂU</span><h2>{compact ? <>Ce facem <span>cu cei mici?</span></> : <>{cinemaOnly ? <>Cinema <span>pentru copii</span></> : <>Evenimente <span>în oraș</span></>}</>}</h2><p>{compact ? "Evenimente în oraș · Timișoara, Dumbrăvița și împrejurimi. Alege o zi și descoperă ce se întâmplă." : (cinemaOnly ? "Proiecții pentru copii în Timișoara și împrejurimi. Afișăm doar programările confirmate." : "Calendarul evenimentelor pentru copii din Timișoara, Dumbrăvița și împrejurimi, cu surse publice verificate.")}</p></div>
+        <div><span className="eyebrow">KIDSCITY · ÎN ORAȘUL TĂU</span><h2>{compact ? <>Ce facem <span>cu cei mici?</span></> : <>{christmasOnly ? <>Magia <span>Crăciunului</span></> : cinemaOnly ? <>Cinema <span>pentru copii</span></> : <>Evenimente <span>în oraș</span></>}</>}</h2><p>{compact ? "Evenimente în oraș · Timișoara, Dumbrăvița și împrejurimi. Alege o zi și descoperă ce se întâmplă." : (cinemaOnly ? "Proiecții pentru copii în Timișoara și împrejurimi. Afișăm doar programările confirmate." : "Calendarul evenimentelor pentru copii din Timișoara, Dumbrăvița și împrejurimi, cu surse publice verificate.")}</p></div>
         {compact && <Link className="text-link" href="/evenimente">Calendar complet <ArrowRight size={16}/></Link>}
       </div>
+      {!cinemaOnly && !christmasOnly && <Link href="/evenimente-speciale" className="text-link">🎄 Evenimente speciale – Magia Crăciunului <ArrowRight size={16}/></Link>}
       <div style={{ display: "flex", gap: 9, flexWrap: "wrap", margin: "18px 0" }}>
         <button className="filter-reset" onClick={() => onDay(today)}>Astăzi</button>
         <button className="filter-reset" onClick={() => { const d = new Date(todayDate.getTime() + 86400000); onDay(dayKey(d)); }}>Mâine</button>
