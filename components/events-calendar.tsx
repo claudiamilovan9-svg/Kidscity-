@@ -18,6 +18,28 @@ const todayKey = () => dayKey(new Date());
 const monthTitle = (year: number, month: number) => new Intl.DateTimeFormat("ro-RO", { month: "long", year: "numeric" }).format(new Date(Date.UTC(year, month, 1)));
 const mondayOffset = (year: number, month: number) => (new Date(Date.UTC(year, month, 1)).getUTCDay() + 6) % 7;
 
+
+// Add only poster URLs for which KidsCity has permission to display the artwork.
+const approvedPosters: Record<string, {url:string; credit:string}> = {};
+function FilmPoster({title}:{title:string}) {
+  const poster=approvedPosters[title];
+  const [failed,setFailed]=useState(false);
+  return <div style={{width:112,aspectRatio:"2 / 3",flexShrink:0,borderRadius:12,overflow:"hidden",background:"#eee9ff",display:"grid",placeItems:"center",color:"#5843a8"}}>
+    {poster && !failed ? <img src={poster.url} alt={`Afiș ${title}`} title={poster.credit} loading="lazy" referrerPolicy="no-referrer" onError={()=>setFailed(true)} style={{width:"100%",height:"100%",objectFit:"contain"}}/> : <span style={{textAlign:"center",padding:10,fontWeight:700,fontSize:13}}>🎬<br/>Cinema KidsCity</span>}
+  </div>;
+}
+function FilmCards({items}:{items:EventItem[]}) {
+ const films=new Map<string,EventItem[]>();
+ for(const event of items){const key=event.title.trim();films.set(key,[...(films.get(key)??[]),event]);}
+ return <div style={{display:"grid",gap:14}}>{Array.from(films,([title,screenings])=>{
+ const venues=new Map<string,EventItem[]>();
+ for(const event of screenings){const key=event.venue??event.organizer;venues.set(key,[...(venues.get(key)??[]),event]);}
+ return <article key={title} style={{background:"white",border:"1px solid #e9e3ed",borderRadius:17,padding:16}}>
+ <div style={{display:"flex",gap:16,alignItems:"flex-start"}}><FilmPoster title={title}/><div style={{minWidth:0}}><h3 style={{margin:"4px 0 8px"}}>{title}</h3><p>{Array.from(new Set(screenings.map(e=>e.age_label).filter(Boolean))).join(" · ")}</p>{approvedPosters[title]&&<small>{approvedPosters[title].credit}</small>}</div></div>
+ {Array.from(venues,([venue,shows])=><section key={venue} style={{borderTop:"1px solid #eee9ff",marginTop:14,paddingTop:12}}><strong>{venue}</strong><div style={{display:"flex",gap:8,flexWrap:"wrap",marginTop:8}}>{shows.map(e=><a key={e.id} href={e.ticket_url??e.source_url} target="_blank" rel="noopener noreferrer" style={{background:"#f5f2ff",color:"#5843a8",borderRadius:9,padding:"8px 10px",fontSize:13,fontWeight:700}}>{localTime(e.starts_at)} · {e.description?.split(" · Program")[0]??"Verifică versiunea"}</a>)}</div><a href={shows[0].ticket_url??shows[0].source_url} target="_blank" rel="noopener noreferrer" style={{display:"inline-block",marginTop:10,color:"#5843a8",fontWeight:700}}>Vezi bilete ↗</a></section>)}
+ </article>})}</div>;
+}
+
 export default function EventsCalendar({ compact = false, cinemaOnly = false }: { compact?: boolean; cinemaOnly?: boolean }) {
   const [today] = useState(todayKey);
   const [selected, setSelected] = useState(today);
@@ -106,7 +128,7 @@ export default function EventsCalendar({ compact = false, cinemaOnly = false }: 
       <div style={{ marginTop: 20 }}>
         <h3 style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}><CalendarDays size={20}/> {new Intl.DateTimeFormat("ro-RO", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${selected}T12:00:00Z`))}</h3>
         {loading && selectedEvents.length === 0 ? <p>Se încarcă evenimentele...</p> : error && selectedEvents.length === 0 ? <p role="alert">Nu am putut încărca evenimentele: {error}</p> : selectedEvents.length === 0 ? <p>Nu avem evenimente confirmate pentru această zi și localitate. Încearcă o altă dată.</p> :
-          <div style={{ display: "grid", gap: 12 }}>
+          cinemaOnly ? <FilmCards items={selectedEvents}/> : <div style={{ display: "grid", gap: 12 }}>
             {selectedEvents.map(event => <article key={event.id} style={{ background: "white", border: "1px solid #e9e3ed", borderRadius: 17, padding: 17 }}>
               <span style={{ color: "#7557d5", fontWeight: 700 }}>{localTime(event.starts_at)} · {event.category}</span>
               <h3 style={{ margin: "8px 0" }}>{event.title}</h3>
